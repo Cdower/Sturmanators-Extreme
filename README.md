@@ -15,6 +15,11 @@ Development:
 - npm install -g babel
 - babel -w popupES6.js --out-file popup.js
 
+Contributing:
+-------------
+- Fix branches: `fix/<fix-name>`
+- Feature branches: `feature/<feature-name>`
+- Merge to `develop` for testing
 
 Developers:
 ----------------
