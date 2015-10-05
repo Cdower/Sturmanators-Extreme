@@ -20,6 +20,7 @@ Contributing:
 - Fix branches: `fix/<fix-name>`
 - Feature branches: `feature/<feature-name>`
 - Merge to `develop` for testing
+- Pull Request to `master` for tested releases
 
 Developers:
 ----------------
