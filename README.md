@@ -9,7 +9,14 @@ To test it out:
 - Select Folder w/ code
 - Should immediately load in and you should see the extension icon on the upper right-hand corner
 
-Developers: 
+Development:
+-------------
+- Install Node + npm (nodejs.org)
+- npm install -g babel
+- babel -w popupES6.js --out-file popup.js
+
+
+Developers:
 ----------------
 - Chris Dower - @cdower
 - Sarabeth Jaffe - @jaffes2
