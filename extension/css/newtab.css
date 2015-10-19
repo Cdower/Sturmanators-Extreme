@@ -1,0 +1,21 @@
+body {
+  background-color: #F4FBFB;
+}
+
+.container {
+}
+
+#header-logo {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0;
+  color: rgba(0,0,10,0.7);
+}
+
+.row.header {
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  margin-bottom: 2rem;
+}
+
+
