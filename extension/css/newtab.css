@@ -26,21 +26,19 @@ h5{
     height: 100%;
     width: 100%;
     transform: scale(0.8); 
-    float: left;
 }
 
 #content-logo{
   border-left-color: black;
   border-left-width: 10px;
-  margin-left: 100px;
   border-left: 1px solid rgba(0,0,0,0.2);
   display:inline-block;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 0;
   color: rgba(0,0,10,0.7);
-  float: right;
   padding-left: 100px;
+  margin-bottom: 20px;
 }
 
 #analytics-logo{
@@ -49,8 +47,8 @@ h5{
   letter-spacing: 2px;
   margin-bottom: 0;
   color: rgba(0,0,10,0.7);
-  float: left;
   margin-right: -20px;
+  margin-bottom: 20px;
 }
 
 #header-logo {
