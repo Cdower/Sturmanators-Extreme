@@ -13,7 +13,7 @@ Development:
 -------------
 - Install Node + npm (nodejs.org)
 - npm install -g babel
-- babel -w popupES6.js --out-file popup.js
+- babel -w es6/ -d extension/js
 
 Contributing:
 -------------
