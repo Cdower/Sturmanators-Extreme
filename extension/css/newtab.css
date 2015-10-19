@@ -18,4 +18,84 @@ body {
   margin-bottom: 2rem;
 }
 
+.details {
+  margin-top: 2rem;
+  padding-top: 2rem;
+}
 
+.details ul {
+  list-style: none;
+}
+
+.details ul li {
+  background-color: #F4FBFB;
+  transition: background-color 150ms ease-in;
+  margin: 0;
+  margin-left: -8px;
+  padding: 5px 8px;
+  position: relative;
+}
+
+.details ul li:hover {
+  cursor: pointer;
+  background-color: white;
+}
+
+.details ul li .controls {
+  display: inline-block;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  height: 16px;
+  width: 64px;
+  opacity: 0;
+  transition: opacity 150ms ease-in;
+}
+
+.details ul li:hover .controls {
+  opacity: 1;
+}
+
+.details ul li .controls .control-item {
+  height: 12px;
+  width: 12px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+  margin-left: 2px;
+}
+
+.details ul li .controls .control-item {
+  border: 2px solid transparent;
+  border-color: transparent;
+  transition: border-color 100ms,
+              background-color 100ms;
+}
+
+.details ul li .controls .control-item:hover {
+  background-color: transparent;
+}
+
+.details ul li .controls .control-item-productive {
+  background-color: #8AE1FE;
+}
+
+.details ul li .controls .control-item-unknown {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.details ul li .controls .control-item-unproductive {
+  background-color: #FE684D;
+}
+
+.details ul li .controls .control-item-productive:hover {
+  border-color: #8AE1FE;
+}
+
+.details ul li .controls .control-item-unknown:hover {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.details ul li .controls .control-item-unproductive:hover {
+  border-color: #FE684D;
+}
