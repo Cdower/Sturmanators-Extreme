@@ -1,23 +1,27 @@
 <!doctype html>
+<meta charset="utf-8">
 <html>
   <head>
     <title>Minerva Analytics</title>
+    <script charset="utf-8" src="../js/d3.js"></script>
+    <script src="../js/plottable.js"></script>
     <script src="../js/newtab.js"></script>
     <link rel="stylesheet" type="text/css" href="css/normalize.css">
     <link rel="stylesheet" type="text/css" href="css/skeleton.css">
+    <link rel="stylesheet" type="text/css" href="css/plottable.css">
     <link rel="stylesheet" type="text/css" href="css/newtab.css">
   </head>
   <body>
     <div class="container">
       <div class="row header">
-        <div class="twelve column">
+        <div class="twelve columns">
           <h5 id="header-logo">Minerva Analytics</h5>
         </div>
       </div>
 
       <div class="row graph">
-        <div class="twelve column">
-          <iframe width=100% height=600 frameborder="0" seamless="seamless" scrolling="no" src="https://plot.ly/~Dreamshot/411.embed"> </iframe>
+        <div class="twelve columns">
+          <svg id="graph">
         </div>
       </div>
 
