@@ -1,0 +1,151 @@
+body {
+  background-color: #F4FBFB;
+}
+
+.container {
+  letter-spacing: 0px;
+  margin-bottom: 0;
+  color: rgba(0,0,10,0.7);
+}
+
+h5{
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0;
+  color: rgba(0,0,10,0.7);
+}
+
+#content iframe {
+    display:inline-block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    transform: scale(0.8); 
+    float: left;
+}
+
+#content-logo{
+  border-left-color: black;
+  border-left-width: 10px;
+  margin-left: 100px;
+  border-left: 1px solid rgba(0,0,0,0.2);
+  display:inline-block;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0;
+  color: rgba(0,0,10,0.7);
+  float: right;
+  padding-left: 100px;
+}
+
+#analytics-logo{
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0;
+  color: rgba(0,0,10,0.7);
+  float: left;
+  margin-right: -20px;
+}
+
+#header-logo {
+  display:inline-block;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0;
+  color: rgba(0,0,10,0.7);
+}
+
+.row.header {
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  margin-bottom: 2rem;
+}
+
+.details {
+  margin-top: 2rem;
+  padding-top: 2rem;
+}
+
+.details ul {
+  list-style: none;
+}
+
+.details ul li {
+  background-color: #F4FBFB;
+  transition: background-color 150ms ease-in;
+  margin: 0;
+  margin-left: -8px;
+  padding: 5px 8px;
+  position: relative;
+}
+
+.details ul li:hover {
+  cursor: pointer;
+  background-color: white;
+}
+
+.details ul li .controls {
+  display: inline-block;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  height: 16px;
+  width: 64px;
+  opacity: 0;
+  transition: opacity 150ms ease-in;
+}
+
+.details ul li:hover .controls {
+  opacity: 1;
+}
+
+.details ul li .controls .control-item {
+  height: 12px;
+  width: 12px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+  margin-left: 2px;
+}
+
+.details ul li .controls .control-item {
+  border: 2px solid transparent;
+  border-color: transparent;
+  transition: border-color 100ms,
+              background-color 100ms;
+}
+
+.details ul li .controls .control-item:hover {
+  background-color: transparent;
+}
+
+.details ul li .controls .control-item-productive {
+  background-color: #8AE1FE;
+}
+
+.details ul li .controls .control-item-unknown {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.details ul li .controls .control-item-unproductive {
+  background-color: #FE684D;
+}
+
+.details ul li .controls .control-item-productive:hover {
+  border-color: #8AE1FE;
+}
+
+.details ul li .controls .control-item-unknown:hover {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.details ul li .controls .control-item-unproductive:hover {
+  border-color: #FE684D;
+}
