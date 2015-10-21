@@ -51,11 +51,11 @@ function buildTypedUrlList() {
   // that we expect to get.  When it reaches zero, we have all results.
   var numRequestsOutstanding = 0;
 
-chrome.history.search({
+  chrome.history.search({
       'text': '',              // Return every history item....
       'startTime': oneWeekAgo  // that was accessed less than one week ago.
-    },
-    function(historyItems) {
+  },
+  function(historyItems) {
       // For each history item, get details on all visits.
       for (var i = 0; i < historyItems.length; ++i) {
         var url = historyItems[i].url;
@@ -122,7 +122,8 @@ chrome.history.search({
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
   renderGraph();
-  buildTypedUrlList();
+  // buildTypedUrlList();
+  renderDomainList(domains, "ul.domain-list-productive");
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);

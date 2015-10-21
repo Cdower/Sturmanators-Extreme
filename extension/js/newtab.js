@@ -118,7 +118,8 @@ var DOMLoaded = function DOMLoaded() {
     console.debug("EVENT: DOMContentLoaded");
   }
   renderGraph();
-  buildTypedUrlList();
+  // buildTypedUrlList();
+  renderDomainList(domains, "ul.domain-list-productive");
 };
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);
