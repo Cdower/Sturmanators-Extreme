@@ -1,5 +1,77 @@
 var VERBOSE = true;
 
+class Domain {
+  constructor(options){
+    this.domain = options.domain;
+    this.template = null;
+    this.productivity = options.productivity == undefined ? options.productivity : 0;
+    this.visits = options.visits;
+    this.history = {};
+  }
+
+  render(){
+    return _.template(this.template, this.toObject());
+  }
+
+  toObject(){
+    var obj = {};
+    obj.domain = this.domain;
+    obj.productivity = this.productivity;
+    return obj;
+  }
+
+  setTemplate(template){
+    this.template = template;
+  }
+
+  setHistory(historyObject){
+  }
+
+  isProductive(val){
+    /* 0: UNKNOWN | 1: UNPRODUCTIVE | 2: PRODUCTIVE */
+    if(val != undefined){ this.isProductive = val; }
+    return this.isProductive;
+  }
+}
+
+
+/**** TESTING ****/
+var exampleDomains = [
+  {
+    domain: "domain.com",
+    visits: 58,
+    lastSevenDays: null,
+    productivity: 2,
+  },
+  {
+    domain: "bomb.com",
+    visits: 68,
+    lastSevenDays: null,
+    productivity: 1,
+  },
+  {
+    domain: "wombo.com",
+    visits: 20,
+    lastSevenDays: null,
+    productivity: 1
+  },
+  {
+    domain: "everybodywombo.com",
+    visits: 90,
+    lastSevenDays: null,
+    productivity: 0
+  },
+];
+
+var domains = [];
+for(var item of exampleDomains){
+  var d = new Domain(item);
+  domains.push(d);
+}
+
+console.log(domains);
+
+/**** END TESTING ****/
 
 
 var renderGraph = function() {
@@ -35,9 +107,21 @@ var renderGraph = function() {
 
 }
 
+var renderClassControls = function(productive, unproductive){
+}
+
+var renderDomainList = function(domains){
+  for(var d of domains){
+    d.setTemplate("<div><%= domain %></div>");
+    var str = d.render();
+    console.log(str);
+  }
+}
+
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
   renderGraph();
+  renderDomainList(domains);
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);
