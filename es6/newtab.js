@@ -1,4 +1,5 @@
 var VERBOSE = true;
+var $ = Sizzle;
 
 class Domain {
   constructor(options){
@@ -10,7 +11,8 @@ class Domain {
   }
 
   render(){
-    return _.template(this.template, this.toObject());
+    var compiled = _.template(this.template);
+    return compiled(this.toObject());
   }
 
   toObject(){
@@ -21,6 +23,7 @@ class Domain {
   }
 
   setTemplate(template){
+    if(typeof template == "object"){ template = template.join("\n"); }
     this.template = template;
   }
 
@@ -35,7 +38,7 @@ class Domain {
 }
 
 
-/**** TESTING ****/
+/**** TEST DUMMY DATA ****/
 var exampleDomains = [
   {
     domain: "domain.com",
@@ -69,14 +72,10 @@ for(var item of exampleDomains){
   domains.push(d);
 }
 
-console.log(domains);
-
-/**** END TESTING ****/
-
+/**** END TEST DUMMY DATA ****/
 
 var renderGraph = function() {
   if(VERBOSE){ console.debug("FUNCTION CALL: renderGraph()"); }
-
 
   var xScale = new Plottable.Scales.Linear();
   var yScale = new Plottable.Scales.Linear();
@@ -104,24 +103,26 @@ var renderGraph = function() {
   ]);
 
   chart.renderTo("svg#graph");
-
 }
 
-var renderClassControls = function(productive, unproductive){
-}
+var renderDomainList = function(domains, renderTargetSelector){
+  if(VERBOSE){ console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector); }
 
-var renderDomainList = function(domains){
+  var str = "";
   for(var d of domains){
-    d.setTemplate("<div><%= domain %></div>");
-    var str = d.render();
-    console.log(str);
+    d.setTemplate(domainListingTemplate);
+    str += d.render();
+  }
+
+  for(var n of $(renderTargetSelector)){
+    n.innerHTML = str;
   }
 }
 
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
   renderGraph();
-  renderDomainList(domains);
+  renderDomainList(domains, "ul.domain-list-productive");
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);

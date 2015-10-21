@@ -5,6 +5,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var VERBOSE = true;
+var $ = Sizzle;
 
 var Domain = (function () {
   function Domain(options) {
@@ -17,12 +18,13 @@ var Domain = (function () {
     this.history = {};
   }
 
-  /**** TESTING ****/
+  /**** TEST DUMMY DATA ****/
 
   _createClass(Domain, [{
     key: "render",
     value: function render() {
-      return _.template(this.template, this.toObject());
+      var compiled = _.template(this.template);
+      return compiled(this.toObject());
     }
   }, {
     key: "toObject",
@@ -35,6 +37,9 @@ var Domain = (function () {
   }, {
     key: "setTemplate",
     value: function setTemplate(template) {
+      if (typeof template == "object") {
+        template = template.join("\n");
+      }
       this.template = template;
     }
   }, {
@@ -88,6 +93,8 @@ try {
     var d = new Domain(item);
     domains.push(d);
   }
+
+  /**** END TEST DUMMY DATA ****/
 } catch (err) {
   _didIteratorError = true;
   _iteratorError = err;
@@ -102,10 +109,6 @@ try {
     }
   }
 }
-
-console.log(domains);
-
-/**** END TESTING ****/
 
 var renderGraph = function renderGraph() {
   if (VERBOSE) {
@@ -136,9 +139,12 @@ var renderGraph = function renderGraph() {
   chart.renderTo("svg#graph");
 };
 
-var renderClassControls = function renderClassControls(productive, unproductive) {};
+var renderDomainList = function renderDomainList(domains, renderTargetSelector) {
+  if (VERBOSE) {
+    console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector);
+  }
 
-var renderDomainList = function renderDomainList(domains) {
+  var str = "";
   var _iteratorNormalCompletion2 = true;
   var _didIteratorError2 = false;
   var _iteratorError2 = undefined;
@@ -147,9 +153,8 @@ var renderDomainList = function renderDomainList(domains) {
     for (var _iterator2 = domains[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
       var d = _step2.value;
 
-      d.setTemplate("<div><%= domain %></div>");
-      var str = d.render();
-      console.log(str);
+      d.setTemplate(domainListingTemplate);
+      str += d.render();
     }
   } catch (err) {
     _didIteratorError2 = true;
@@ -165,6 +170,31 @@ var renderDomainList = function renderDomainList(domains) {
       }
     }
   }
+
+  var _iteratorNormalCompletion3 = true;
+  var _didIteratorError3 = false;
+  var _iteratorError3 = undefined;
+
+  try {
+    for (var _iterator3 = $(renderTargetSelector)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+      var n = _step3.value;
+
+      n.innerHTML = str;
+    }
+  } catch (err) {
+    _didIteratorError3 = true;
+    _iteratorError3 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion3 && _iterator3["return"]) {
+        _iterator3["return"]();
+      }
+    } finally {
+      if (_didIteratorError3) {
+        throw _iteratorError3;
+      }
+    }
+  }
 };
 
 var DOMLoaded = function DOMLoaded() {
@@ -172,7 +202,7 @@ var DOMLoaded = function DOMLoaded() {
     console.debug("EVENT: DOMContentLoaded");
   }
   renderGraph();
-  renderDomainList(domains);
+  renderDomainList(domains, "ul.domain-list-productive");
 };
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);
