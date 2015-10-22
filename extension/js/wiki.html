@@ -1,0 +1,46 @@
+<!doctype html>
+<body>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
+<script src='http://okfnlabs.org/wikipediajs/wikipedia.js'></script>
+</head>
+<script>
+
+var handleData = function handleData(data){
+
+	console.log(data.summary);
+	console.log(data.summary.title);
+
+	$("#title").html($("#title").html() + "" + data.summary.title);
+
+	console.log(data.summary.summary);
+	$("#summary").html($("#summary").html() + "" + data.summary.summary.substring(0,275) + "...");	
+
+	
+	console.log(data.summary.image);
+	//$("#image").html($("#image").html() + "" + data.summary.image);
+	$("#put-image-here").attr("src", imageLink(data));
+}
+
+function imageLink(data){
+	return data.summary.image;
+}
+
+var handleError = function handleError(error){
+	console.log(error);
+}
+
+var info = WIKIPEDIA.getData('http://en.wikipedia.org/wiki/Invasion_of_Normandy', handleData, handleError);
+
+</script>
+
+<div id="image">
+
+<img src="" id="put-image-here">
+</div>
+</br>
+<div id="title"></div>
+</br>
+<div id="summary"></div>
+</body>
+</html>
