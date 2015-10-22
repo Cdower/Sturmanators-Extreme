@@ -6,6 +6,7 @@
 </head>
 <script>
 
+var wikiArticleLink = "http://en.wikipedia.org/wiki/Invasion_of_Normandy";
 var handleData = function handleData(data){
 
 	console.log(data.summary);
@@ -20,6 +21,7 @@ var handleData = function handleData(data){
 	console.log(data.summary.image);
 	//$("#image").html($("#image").html() + "" + data.summary.image);
 	$("#put-image-here").attr("src", imageLink(data));
+	$("#image-link").attr("href", wikiArticleLink);
 }
 
 function imageLink(data){
@@ -30,13 +32,13 @@ var handleError = function handleError(error){
 	console.log(error);
 }
 
-var info = WIKIPEDIA.getData('http://en.wikipedia.org/wiki/Invasion_of_Normandy', handleData, handleError);
+var info = WIKIPEDIA.getData(wikiArticleLink, handleData, handleError);
 
 </script>
 
 <div id="image">
 
-<img src="" id="put-image-here">
+<a href="" id="image-link"><img src="" id="put-image-here"> </a>
 </div>
 </br>
 <div id="title"></div>
