@@ -3,10 +3,15 @@
 <html>
   <head>
     <title>Minerva Analytics</title>
-    <script charset="utf-8" src="../js/d3.js"></script>
+    <script src="../templates/domainListingTemplate.js"></script>
+
+    <script src="../js/underscore.js"></script>
+    <script src="../js/sizzle.js"></script>
+    <script src="../js/d3.js"></script>
     <script src="../js/plottable.js"></script>
     <script src="../js/newtab.js"></script>
     <script src="../js/wiki.js"></script>
+
     <link rel="stylesheet" type="text/css" href="css/normalize.css">
     <link rel="stylesheet" type="text/css" href="css/skeleton.css">
     <link rel="stylesheet" type="text/css" href="css/plottable.css">
@@ -22,15 +27,12 @@
 
       <div class="row">
        <div class="six columns">
-          <h6 id="analytics-logo"> Browsing Analytics </h6>
+          <h6 id="analytics-logo">Browsing Analytics </h6>
             <!-- <img src="/images/analytics-placeholder.png"> -->
         </div>
 
-      <div class="six columns">
-
-      </div>
-
        <div class="six columns">
+
          <h5 id="content-logo"> Recommended Content </h5> 
 
           <div id="image">
@@ -38,56 +40,26 @@
           </div>
           <div id="title"></div>
           <div id="summary"></div>
-          
+
+         <h5 id="content-logo">Recommended Content </h5>
+
         </div>
       </div>
 
       <div class="row graph">
-
         <div class="six columns">
-          <svg id="graph"> 
+          <svg id="graph"></svg>
         </div>
       </div>
 
       <div class="row details">
         <div class="four columns">
           <h5>Productive</h5>
-          <ul>
-            <li>
-              lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-          </ul>
+          <ul class="domain-list-productive"></ul>
         </div>
         <div class="four columns">
           <h5>Unproductive</h5>
           <ul>
-
             <li>lipsum.com
               <div class="controls">
                 <span class="control-item control-item-productive"></span>
@@ -159,9 +131,6 @@
           </ul>
         </div>
       </div>
-
-
-
     </div>
   </body>
 </html>
