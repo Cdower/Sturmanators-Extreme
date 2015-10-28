@@ -115,19 +115,30 @@ var renderGraph = function() {
 function buildTypedUrlList() {
   // To look for history items visited in the last week,
   // subtract a week of microseconds from the current time.
-  var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-  var oneWeekAgo = (new Date).getTime() - microsecondsPerWeek;
+  var endTime = (new Date).getTime();
 
   // Track the number of callbacks from chrome.history.getVisits()
   // that we expect to get.  When it reaches zero, we have all results.
   var numRequestsOutstanding = 0;
 
-  chrome.history.search({
-      'text': '',              // Return every history item....
-      'startTime': oneWeekAgo  // that was accessed less than one week ago.
-  },
-  function(historyItems) {
+  //This will run a search for each 30 minute slot in the last week
+  //This code works so long as time is going forwards or stopped. 
+  //If time goes backwards there will be errors
+
+  //for debugging purposes we just search the last 12 hours of history
+  for(var timeSlot = 0; timeSlot< (24); timeSlot++){
+
+        var startTime = (endTime-(1000*60*30));
+        chrome.history.search({
+              'text': '',              // Return every history item....
+              'startTime': startTime,
+              'endTime': endTime
+          }, function(historyItems) {
       // For each history item, get details on all visits.
+      
+      console.log(historyItems);
+
+        /*
       for (var i = 0; i < historyItems.length; ++i) {
         var url = historyItems[i].url;
         var processVisitsWithUrl = function(url) {
@@ -142,12 +153,28 @@ function buildTypedUrlList() {
       }
       if (!numRequestsOutstanding) {
         onAllVisitsProcessed();
-      }
+      }*/
     });
-
+    endTime = startTime;
+  }
   // Maps URLs to a count of the number of times the user typed that URL into
   // the omnibox.
   var urlToCount = {};
+
+  //3 arrays that hold the naughty, and nice URLs.
+  //at some point we'll move this to persistant storage
+
+  //var naughtyList = ["facebook", "buzzfeed", "reddit"];
+  //var niceList = ["wikipedia","news.ycombinator","stackoverflow"];
+
+
+  //Returns true if a url contains one of the domains in a list
+  var isListed = function(url, list) {
+    for(domain in list){
+      if(url.indexOf(domain) > -1) return false;
+    }
+    return true;
+  }
 
   // Callback for chrome.history.getVisits().  Counts the number of
   // times a user visited a URL by typing the address.
@@ -194,6 +221,11 @@ function buildTypedUrlList() {
 var renderDomainList = function(domains, renderTargetSelector){
   if(VERBOSE){ console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector); }
 
+  //Somewhere in here throws the error
+  /*Uncaught EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' 
+    is not an allowed source of script in the following Content Security Policy directive:
+    "script-src 'self' blob: filesystem: chrome-extension-resource:".*/
+
   var str = "";
   for(var d of domains){
     d.setTemplate(domainListingTemplate);
@@ -208,7 +240,7 @@ var renderDomainList = function(domains, renderTargetSelector){
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
   renderGraph();
-  // buildTypedUrlList();
+  buildTypedUrlList();
   renderDomainList(domains, "ul.domain-list-productive");
 }
 
