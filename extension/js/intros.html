@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
+<script type="text/javascript">
+var title="jQuery";
+
+var url = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exlimit=max&explaintext&exintro&titles=Yahoo|Google&redirects=";
+
+var v = $.getJSON(url, function(data) {
+    console.log(data);
+    var q = "query";
+    console.log(data[q]);
+    var query = data[q];
+    var pages = query["pages"];
+
+    console.log(pages);
+ 
+    for(var k in pages){
+    	console.log(k);
+    	console.log(pages[k]);
+    	var page = pages[k];
+    	var categories = page["categories"];
+
+    	var str = "<ul>";
+    	for(var i = 0; i < categories.length; i++){
+    		var catname = categories[i].title;
+    		console.log(catname);
+    		str += "<li>"
+    		str += catname;
+    		str += "</li>";
+		}
+		str += "</ul>";
+    	$("#mydiv").html($("#mydiv").html() + str);
+    }
+
+});
+
+
+</script>
+<div id="mydiv"></div>
+</body>
+</html> 

@@ -1,11 +1,3 @@
-<!doctype html>
-<body>
-<head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
-<script src='http://okfnlabs.org/wikipediajs/wikipedia.js'></script>
-</head>
-<script>
-
 var wikiArticleLink = "http://en.wikipedia.org/wiki/Invasion_of_Normandy";
 var handleData = function handleData(data){
 
@@ -33,15 +25,3 @@ var handleError = function handleError(error){
 }
 
 var info = WIKIPEDIA.getData(wikiArticleLink, handleData, handleError);
-
-</script>
-
-<div id="image">
-<a href="" id="image-link"><img src="" id="put-image-here" height="5%" width="5%"> </a>
-</div>
-</br>
-<div id="title"></div>
-</br>
-<div id="summary"></div>
-</body>
-</html>
