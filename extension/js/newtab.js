@@ -154,7 +154,7 @@ function buildTypedUrlList() {
   var numRequestsOutstanding = 0;
 
   //Test URL parsing using purl. This returns github.com to the console.
-  console.log(purl("https://github.com/allmarkedup/purl/tree/master/test").attr('host'));
+  //console.log(purl("https://github.com/allmarkedup/purl/tree/master/test").attr('host'));
 
   //This will run a search for each 30 minute slot in the last week
   //This code works so long as time is going forwards or stopped.
@@ -171,24 +171,13 @@ function buildTypedUrlList() {
     }, function (historyItems) {
       // For each history item, get details on all visits.
 
-      console.log(historyItems);
-
-      /*
-      for (var i = 0; i < historyItems.length; ++i) {
-      var url = historyItems[i].url;
-      var processVisitsWithUrl = function(url) {
-        // We need the url of the visited item to process the visit.
-        // Use a closure to bind the url into the callback's args.
-        return function(visitItems) {
-          processVisits(url, visitItems);
-        };
-      };
-      chrome.history.getVisits({url: url}, processVisitsWithUrl(url));
-      numRequestsOutstanding++;
+      //console.log(historyItems);
+      var parsedItems = [];
+      //console.log(startTime);
+      for (var visit in historyItems) {
+        parsedItems.push(purl(historyItems[visit].url).attr('host'));
       }
-      if (!numRequestsOutstanding) {
-      onAllVisitsProcessed();
-      }*/
+      console.log(parsedItems);
     });
     endTime = startTime;
   }
@@ -199,7 +188,7 @@ function buildTypedUrlList() {
   //3 arrays that hold the naughty, and nice URLs.
   //at some point we'll move this to persistant storage
 
-  //var naughtyList = ["facebook", "buzzfeed", "reddit"];
+  //var naughtyList = ["facebook.com", "buzzfeed.com", "reddit.com"];
   //var niceList = ["wikipedia","news.ycombinator","stackoverflow"];
 
   //Returns true if a url contains one of the domains in a list
