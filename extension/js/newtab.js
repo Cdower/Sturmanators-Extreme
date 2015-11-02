@@ -151,7 +151,6 @@ function buildTypedUrlList() {
 
   // Track the number of callbacks from chrome.history.getVisits()
   // that we expect to get.  When it reaches zero, we have all results.
-  var numRequestsOutstanding = 0;
 
   //Test URL parsing using purl. This returns github.com to the console.
   //console.log(purl("https://github.com/allmarkedup/purl/tree/master/test").attr('host'));
@@ -187,21 +186,10 @@ function buildTypedUrlList() {
         urlToCount[parsedURL]++;
       }
 
-      /*
-      var urlArray = [];
-      for (var url in urlToCount) {
-        urlArray.push(url);
-      }
-        urlArray.sort(function(a, b) {
-        return urlToCount[b] - urlToCount[a];
-      });*/
-      //console.log(urlArray);
       console.log(urlToCount);
     });
     endTime = startTime;
   }
-  // Maps URLs to a count of the number of times the user typed that URL into
-  // the omnibox.
 
   //3 arrays that hold the naughty, and nice URLs.
   //at some point we'll move this to persistant storage
@@ -215,43 +203,6 @@ function buildTypedUrlList() {
       if (url.indexOf(list[domain]) > -1) return false;
     }
     return true;
-  };
-
-  // Callback for chrome.history.getVisits().  Counts the number of
-  // times a user visited a URL by typing the address.
-  var processVisits = function processVisits(url, visitItems) {
-    for (var i = 0, ie = visitItems.length; i < ie; ++i) {
-      // Ignore items unless the user typed the URL.
-
-      if (!urlToCount[url]) {
-        urlToCount[url] = 0;
-      }
-
-      urlToCount[url]++;
-    }
-
-    // If this is the final outstanding call to processVisits(),
-    // then we have the final results.  Use them to build the list
-    // of URLs to show in the popup.
-    if (! --numRequestsOutstanding) {
-      onAllVisitsProcessed();
-    }
-  };
-
-  // This function is called when we have the final list of URls to display.
-  var onAllVisitsProcessed = function onAllVisitsProcessed() {
-    // Get the top scorring urls.
-    var urlArray = [];
-    for (var url in urlToCount) {
-      urlArray.push(url);
-    }
-
-    // Sort the URLs by the number of times the user typed them.
-    urlArray.sort(function (a, b) {
-      return urlToCount[b] - urlToCount[a];
-    });
-
-    console.log(urlArray.slice(0, 10));
   };
 }
 
