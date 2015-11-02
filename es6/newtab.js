@@ -141,30 +141,51 @@ function buildTypedUrlList() {
       
       //console.log(historyItems);
       var parsedItems = [];
+
+      var urlToCount = {};
       //console.log(startTime);
       for(var visit in historyItems){
-          parsedItems.push(purl(historyItems[visit].url).attr('host'));
+          var parsedURL = purl(historyItems[visit].url).attr('host');
+          parsedItems.push(parsedURL);
+
+          if (!urlToCount[parsedURL]) {
+            urlToCount[parsedURL] = 0;
+          }
+
+          urlToCount[parsedURL]++;
+        }
+
+      /*
+      var urlArray = [];
+      for (var url in urlToCount) {
+        urlArray.push(url);
       }
-      console.log(parsedItems);
+
+      urlArray.sort(function(a, b) {
+        return urlToCount[b] - urlToCount[a];
+      });*/
+      //console.log(urlArray);
+      console.log(urlToCount);
+      
 
     });
     endTime = startTime;
   }
   // Maps URLs to a count of the number of times the user typed that URL into
   // the omnibox.
-  var urlToCount = {};
+  
 
   //3 arrays that hold the naughty, and nice URLs.
   //at some point we'll move this to persistant storage
 
   //var naughtyList = ["facebook.com", "buzzfeed.com", "reddit.com"];
-  //var niceList = ["wikipedia","news.ycombinator","stackoverflow"];
+  //var niceList = ["en.wikipedia.org","news.ycombinator","stackoverflow"];
 
 
   //Returns true if a url contains one of the domains in a list
   var isListed = function(url, list) {
     for(domain in list){
-      if(url.indexOf(domain) > -1) return false;
+      if(url.indexOf(list[domain]) > -1) return false;
     }
     return true;
   }
