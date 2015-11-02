@@ -121,6 +121,9 @@ function buildTypedUrlList() {
   // that we expect to get.  When it reaches zero, we have all results.
   var numRequestsOutstanding = 0;
 
+  //Test URL parsing using purl. This returns github.com to the console.
+  console.log(purl("https://github.com/allmarkedup/purl/tree/master/test").attr('host'));
+
   //This will run a search for each 30 minute slot in the last week
   //This code works so long as time is going forwards or stopped. 
   //If time goes backwards there will be errors
