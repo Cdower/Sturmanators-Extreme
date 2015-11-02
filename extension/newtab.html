@@ -10,13 +10,46 @@
     <script src="../js/d3.js"></script>
     <script src="../js/plottable.js"></script>
     <script src="../js/newtab.js"></script>
-    <script src="../js/wiki.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
+    <script src='http://okfnlabs.org/wikipediajs/wikipedia.js'></script>
 
     <link rel="stylesheet" type="text/css" href="css/normalize.css">
     <link rel="stylesheet" type="text/css" href="css/skeleton.css">
     <link rel="stylesheet" type="text/css" href="css/plottable.css">
     <link rel="stylesheet" type="text/css" href="css/newtab.css">
   </head>
+  <script>
+
+  var wikiArticleLink = "http://en.wikipedia.org/wiki/Invasion_of_Normandy";
+  var handleData = function handleData(data){
+
+    console.log(data.summary);
+    console.log(data.summary.title);
+
+    $("#title").html($("#title").html() + "" + data.summary.title);
+
+    console.log(data.summary.summary);
+    $("#summary").html($("#summary").html() + "" + data.summary.summary.substring(0,150) + "...");  
+
+    
+    console.log(data.summary.image);
+    //$("#image").html($("#image").html() + "" + data.summary.image);
+    $("#put-image-here").attr("src", imageLink(data));
+    $("#image-link").attr("href", wikiArticleLink);
+  }
+
+  function imageLink(data){
+    return data.summary.image;
+  }
+
+  var handleError = function handleError(error){
+    console.log(error);
+  }
+
+  var info = WIKIPEDIA.getData(wikiArticleLink, handleData, handleError);
+
+ </script>
   <body>
     <div class="container">
       <div class="row header">
@@ -34,9 +67,16 @@
        <div class="six columns">
 
          <h5 id="content-logo"> Recommended Content </h5> 
-         <div id="image"><a href="" id="image-link"><img src="" id="put-image-here"></a></div>
+
+        <ul class="recommended-list">
+        <li>
+         <div id="image">
+          <a href="" id="image-link"><img src="" id="put-image-here" align="left" height="20%" width="20%"> </a>
+         </div>
          <div id="title"></div>
          <div id="summary"></div>
+         </li>
+        </ul>
 
       </div>
 
