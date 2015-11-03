@@ -5,7 +5,6 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var VERBOSE = true;
-var $ = Sizzle;
 
 var Domain = (function () {
   function Domain(options) {
@@ -221,6 +220,71 @@ function buildTypedUrlList() {
 //End History pasing code
 //======================================================================================
 
+handleData();
+
+fetchWikipediaArticle.handleData();
+
+var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
+
+  var wikiArticleLink = "http://en.wikipedia.org/wiki/" + titleName;
+
+  var container = $(".wikipedia-container");
+  var templateString = wikipediaArticleTemplate.join("\n");
+  var compiled = _.template(templateString);
+
+  var handleData = function handleData(data) {
+
+    var truncatedSummary = "not found";
+    var imageUrl = "images/notfound.png";
+    var title = "Article Could Not Be Fetched";
+
+    if (data.summary != undefined) {
+      if (data.summary.title != undefined) {
+        title = data.summary.title;
+      }
+
+      if (data.summary.image != undefined) {
+        imageUrl = data.summary.image;
+      }
+
+      if (data.summary.summary != undefined) {
+        truncatedSummary = data.summary.summary.substring(0, 150) + "...";
+      }
+    }
+
+    var rendered = compiled({
+      title: title,
+      imageUrl: imageUrl,
+      summary: truncatedSummary
+    });
+
+    container.append(rendered);
+  };
+
+  WIKIPEDIA.getData(wikiArticleLink, handleData);
+
+  /****
+  var wikiArticleLink = "http://en.wikipedia.org/wiki/Invasion_of_Normandy";
+  var handleData = function(data){
+     console.log(data.summary);
+    console.log(data.summary.title);
+     $("#title").html($("#title").html() + "" + data.summary.title);
+     console.log(data.summary.summary);
+    $("#summary").html($("#summary").html() + "" + data.summary.summary.substring(0,150) + "...");
+     console.log(data.summary.image);
+    //$("#image").html($("#image").html() + "" + data.summary.image);
+    $("#put-image-here").attr("src", imageLink(data));
+    $("#image-link").attr("href", wikiArticleLink);
+  }
+   function imageLink(data){
+    return data.summary.image;
+  }
+   var handleError = function handleError(error){
+    console.log(error);
+  }
+   */
+};
+
 var renderDomainList = function renderDomainList(domains, renderTargetSelector) {
   if (VERBOSE) {
     console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector);
@@ -286,6 +350,31 @@ var DOMLoaded = function DOMLoaded() {
   renderGraph();
   // buildTypedUrlList();
   renderDomainList(domains, "ul.domain-list-productive");
+  var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
+  var _iteratorNormalCompletion4 = true;
+  var _didIteratorError4 = false;
+  var _iteratorError4 = undefined;
+
+  try {
+    for (var _iterator4 = articles[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+      var a = _step4.value;
+
+      fetchWikipediaArticle(a);
+    }
+  } catch (err) {
+    _didIteratorError4 = true;
+    _iteratorError4 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion4 && _iterator4["return"]) {
+        _iterator4["return"]();
+      }
+    } finally {
+      if (_didIteratorError4) {
+        throw _iteratorError4;
+      }
+    }
+  }
 };
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);

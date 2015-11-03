@@ -1,5 +1,4 @@
 var VERBOSE = true;
-var $ = Sizzle;
 
 class Domain {
   constructor(options){
@@ -191,6 +190,84 @@ function buildTypedUrlList() {
 //======================================================================================
 
 
+handleData()
+
+fetchWikipediaArticle.handleData()
+
+
+var fetchWikipediaArticle = function(titleName){
+
+  var wikiArticleLink = "http://en.wikipedia.org/wiki/" + titleName;
+
+
+  var container = $(".wikipedia-container");
+  var templateString = wikipediaArticleTemplate.join("\n");
+  var compiled = _.template(templateString);
+
+  var handleData = function(data){
+
+    var truncatedSummary = "not found";
+    var imageUrl = "images/notfound.png";
+    var title = "Article Could Not Be Fetched";
+
+    if(data.summary != undefined){
+      if(data.summary.title != undefined){
+        title = data.summary.title;
+      }
+
+      if(data.summary.image != undefined){
+        imageUrl = data.summary.image;
+      }
+
+      if(data.summary.summary != undefined){
+        truncatedSummary = data.summary.summary.substring(0,150) + "...";
+      }
+    }
+
+    var rendered = compiled({
+      title: title,
+      imageUrl: imageUrl,
+      summary: truncatedSummary
+    });
+
+    container.append(rendered);
+  }
+
+  WIKIPEDIA.getData(wikiArticleLink, handleData);
+
+  /****
+  var wikiArticleLink = "http://en.wikipedia.org/wiki/Invasion_of_Normandy";
+  var handleData = function(data){
+
+    console.log(data.summary);
+    console.log(data.summary.title);
+
+    $("#title").html($("#title").html() + "" + data.summary.title);
+
+    console.log(data.summary.summary);
+    $("#summary").html($("#summary").html() + "" + data.summary.summary.substring(0,150) + "...");
+
+    console.log(data.summary.image);
+    //$("#image").html($("#image").html() + "" + data.summary.image);
+    $("#put-image-here").attr("src", imageLink(data));
+    $("#image-link").attr("href", wikiArticleLink);
+  }
+
+  function imageLink(data){
+    return data.summary.image;
+  }
+
+  var handleError = function handleError(error){
+    console.log(error);
+  }
+
+  */
+}
+
+
+
+
+
 var renderDomainList = function(domains, renderTargetSelector){
   if(VERBOSE){ console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector); }
 
@@ -210,6 +287,10 @@ var DOMLoaded = function() {
   renderGraph();
   // buildTypedUrlList();
   renderDomainList(domains, "ul.domain-list-productive");
+  var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
+  for(var a of articles){
+    fetchWikipediaArticle(a);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);
