@@ -12,7 +12,7 @@ To test it out:
 Development:
 -------------
 - Install Node + npm (nodejs.org)
-- npm install -g babel
+- sudo npm install -g babel
 - babel -w es6/ -d extension/js
 
 Contributing:
