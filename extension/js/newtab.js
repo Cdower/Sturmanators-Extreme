@@ -227,6 +227,14 @@ function getDomains() {
     }
 
     console.log(domains);
+
+    function domainSort(a, b) {
+      return b.views - a.views;
+    };
+
+    domains.niceList.sort(domainSort);
+    domains.naughtyList.sort(domainSort);
+    domains.neutralList.sort(domainSort);
   });
   endTime = startTime;
   //}

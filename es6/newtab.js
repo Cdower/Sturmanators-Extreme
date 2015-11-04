@@ -197,10 +197,17 @@ function getDomains() {
         else{
           domains.neutralList.push({url:url, views:urlToCount[url]});
         }
-
       }
 
       console.log(domains);
+
+      function domainSort(a,b){
+        return b.views - a.views;
+      };
+
+      domains.niceList.sort(domainSort);
+      domains.naughtyList.sort(domainSort);
+      domains.neutralList.sort(domainSort);
 
 
     });
