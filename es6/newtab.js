@@ -128,7 +128,10 @@ var renderDomainList = function(domains, renderTargetSelector){
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
   renderGraph();
+  
+  //Print out the lists of productive, unproductive, and undefinied domains to the console
   console.log(getDomains());
+  
   renderDomainList(domains, "ul.domain-list-productive");
 }
 
