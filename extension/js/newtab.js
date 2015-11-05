@@ -95,11 +95,10 @@ try {
   //*/
   /**** END TEST DUMMY DATA ****/
 
-  /*
-  *   recieve data to render and decide what to render
-  *   renderGraph manages and decides which graph to render
-  *   based on input
-  */
+  //=============================================================
+  //Begin graph rendering code
+
+  //AnalyticsRender class
 } catch (err) {
   _didIteratorError = true;
   _iteratorError = err;
@@ -115,111 +114,146 @@ try {
   }
 }
 
+var AnalyticsRender = (function () {
+  function AnalyticsRender(domains) {
+    _classCallCheck(this, AnalyticsRender);
+
+    this.categoryData = [{ x: "Unknown", visits: 0 }, { x: "Unproductive", visits: 0 }, { x: "Productive", visits: 0 }];
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = domains[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        item = _step2.value;
+
+        this.categoryData[item.productivity].visits += item.visits;
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+          _iterator2["return"]();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+  }
+
+  /*
+  *   recieve data to render and decide what to render
+  *   renderGraph creates an AnalyticsRender object and tells it what to render and how based on data on input
+  *   ### Might change name to graphRenderManager to better fit its purpose once
+  *   currently takes AnalyticsRender class object, may change to create analyticsRender class object that calls history to request domain objects
+  */
+
+  /*  Renders a Bar graph from data processed by renderGraph
+  *   Does not display or interact with time data at this time
+  *   Assumes data is from all of time
+  */
+
+  _createClass(AnalyticsRender, [{
+    key: "renderBarGraph",
+    value: function renderBarGraph() {
+      var colorScale = new Plottable.Scales.Color();
+      colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
+
+      var xScale = new Plottable.Scales.Category();
+      var yScale = new Plottable.Scales.Linear();
+
+      var xAxis = new Plottable.Axes.Category(xScale, "bottom");
+      var yAxis = new Plottable.Axes.Numeric(yScale, "left");
+
+      var baseVal = this.categoryData[0].visits / 2;
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = this.categoryData[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          item = _step3.value;
+
+          if (item.visits / 2 < baseVal) {
+            baseVal = item.visits / 2;
+          }
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3["return"]) {
+            _iterator3["return"]();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+
+      var plot = new Plottable.Plots.Bar().addDataset(new Plottable.Dataset(this.categoryData)).x(function (d) {
+        return d.x;
+      }, xScale).y(function (d) {
+        return d.visits;
+      }, yScale).animated(true).attr("fill", function (d) {
+        return d.visits;
+      }, colorScale).baselineValue(baseVal).labelsEnabled(true);
+      new Plottable.Components.Table([[yAxis, plot], [null, xAxis]]).renderTo("svg#graph");
+      window.addEventListener("resize", function () {
+        plot.redraw();
+      });
+    }
+
+    /*
+    *   Renders a Pie graph from data processed by renderGraph
+    *   Does not display or interact with time data at this time
+    *   Assumes data is from all of time
+    */
+  }, {
+    key: "renderPieGraph",
+    value: function renderPieGraph() {
+      var scale = new Plottable.Scales.Linear();
+      var colorScale = new Plottable.Scales.Color();
+      colorScale.range(["#0000FF", "#FF0000", "#FF00FF"]);
+      var legend = new Plottable.Components.Legend(colorScale);
+      colorScale.domain([this.categoryData[2].x, this.categoryData[1].x, this.categoryData[0].x]);
+      legend.xAlignment("left");
+      legend.yAlignment("top");
+
+      var plot = new Plottable.Plots.Pie().addDataset(new Plottable.Dataset(this.categoryData)).sectorValue(function (d) {
+        return d.visits;
+      }, scale).innerRadius(0).attr("fill", function (d) {
+        return d.x;
+      }, colorScale).outerRadius(60).labelsEnabled(true).renderTo("svg#graph");
+      legend.renderTo("svg#graph");
+      window.addEventListener("resize", function () {
+        plot.redraw();
+      });
+    }
+  }]);
+
+  return AnalyticsRender;
+})();
+
 var renderGraph = function renderGraph(domains) {
   if (VERBOSE) {
     console.debug("FUNCTION CALL: renderGraph()");
   }
-  var categoryData = [{ x: "Unknown", visits: 0, value: 0 }, { x: "Unproductive", visits: 0, value: 1 }, { x: "Productive", visits: 0, value: 2 }];
-  var _iteratorNormalCompletion2 = true;
-  var _didIteratorError2 = false;
-  var _iteratorError2 = undefined;
-
-  try {
-    for (var _iterator2 = domains[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-      item = _step2.value;
-
-      categoryData[item.productivity].visits += item.visits;
-    }
-  } catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-        _iterator2["return"]();
-      }
-    } finally {
-      if (_didIteratorError2) {
-        throw _iteratorError2;
-      }
-    }
-  }
-
-  renderPieGraph(categoryData);
-  //renderBarGraph(categoryData);
+  var visual = new AnalyticsRender(domains);
+  visual.renderPieGraph();
 };
 
-var renderBarGraph = function renderBarGraph(data) {
-  console.log(data);
-  var colorScale = new Plottable.Scales.Color();
-  colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
+//End graph rendering code
+//======================================================================================
 
-  var xScale = new Plottable.Scales.Category();
-  var yScale = new Plottable.Scales.Linear();
-
-  var xAxis = new Plottable.Axes.Category(xScale, "bottom");
-  var yAxis = new Plottable.Axes.Numeric(yScale, "left");
-
-  var baseVal = data[0].visits / 2;
-  var _iteratorNormalCompletion3 = true;
-  var _didIteratorError3 = false;
-  var _iteratorError3 = undefined;
-
-  try {
-    for (var _iterator3 = data[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-      item = _step3.value;
-
-      if (item.visits / 2 < baseVal) {
-        baseVal = item.visits / 2;
-      }
-    }
-  } catch (err) {
-    _didIteratorError3 = true;
-    _iteratorError3 = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion3 && _iterator3["return"]) {
-        _iterator3["return"]();
-      }
-    } finally {
-      if (_didIteratorError3) {
-        throw _iteratorError3;
-      }
-    }
-  }
-
-  var plot = new Plottable.Plots.Bar().addDataset(new Plottable.Dataset(data)).x(function (d) {
-    return d.x;
-  }, xScale).y(function (d) {
-    return d.visits;
-  }, yScale).animated(true).attr("fill", function (d) {
-    return d.visits;
-  }, colorScale).baselineValue(baseVal).labelsEnabled(true);
-  new Plottable.Components.Table([[yAxis, plot], [null, xAxis]]).renderTo("svg#graph");
-  window.addEventListener("resize", function () {
-    plot.redraw();
-  });
-};
-
-var renderPieGraph = function renderPieGraph(data) {
-  var scale = new Plottable.Scales.Linear();
-  var colorScale = new Plottable.Scales.Color();
-  colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
-  var legend = new Plottable.Components.Legend(colorScale);
-  colorScale.domain([data[0].x, data[1].x, data[2].x]);
-  legend.xAlignment("left");
-  legend.yAlignment("top");
-
-  var plot = new Plottable.Plots.Pie().addDataset(new Plottable.Dataset(data)).sectorValue(function (d) {
-    return d.visits;
-  }, scale).innerRadius(0).attr("fill", function (d) {
-    return d.x;
-  }, colorScale).outerRadius(60).labelsEnabled(true).renderTo("svg#graph");
-  legend.renderTo("svg#graph");
-  window.addEventListener("resize", function () {
-    plot.redraw();
-  });
-};
+//=============================================================
+//Begin history parsing code
 
 var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
 
@@ -234,6 +268,7 @@ var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
     var truncatedSummary = "not found";
     var imageUrl = "images/notfound.png";
     var title = "Article Could Not Be Fetched";
+    var link = wikiArticleLink;
 
     if (data.summary != undefined) {
       if (data.summary.title != undefined) {
@@ -252,7 +287,8 @@ var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
     var rendered = compiled({
       title: title,
       imageUrl: imageUrl,
-      summary: truncatedSummary
+      summary: truncatedSummary,
+      link: link
     });
 
     container.append(rendered);
