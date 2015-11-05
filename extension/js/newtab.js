@@ -286,6 +286,11 @@ var renderDomainList = function renderDomainList(domains, renderTargetSelector) 
     console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector);
   }
 
+  //Somewhere in here throws the error
+  /*Uncaught EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' 
+    is not an allowed source of script in the following Content Security Policy directive:
+    "script-src 'self' blob: filesystem: chrome-extension-resource:".*/
+
   var str = "";
   var _iteratorNormalCompletion2 = true;
   var _didIteratorError2 = false;
@@ -344,7 +349,10 @@ var DOMLoaded = function DOMLoaded() {
     console.debug("EVENT: DOMContentLoaded");
   }
   renderGraph();
-  // buildTypedUrlList();
+
+  //Print out the lists of productive, unproductive, and undefinied domains to the console
+  console.log(getDomains());
+
   renderDomainList(domains, "ul.domain-list-productive");
   var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
   var _iteratorNormalCompletion4 = true;
@@ -374,4 +382,3 @@ var DOMLoaded = function DOMLoaded() {
 };
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);
-// Use a closure to bind the url into the callback's args.

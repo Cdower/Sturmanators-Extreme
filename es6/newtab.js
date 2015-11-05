@@ -264,12 +264,13 @@ var fetchWikipediaArticle = function(titleName){
   */
 }
 
-
-
-
-
 var renderDomainList = function(domains, renderTargetSelector){
   if(VERBOSE){ console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector); }
+
+  //Somewhere in here throws the error
+  /*Uncaught EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' 
+    is not an allowed source of script in the following Content Security Policy directive:
+    "script-src 'self' blob: filesystem: chrome-extension-resource:".*/
 
   var str = "";
   for(var d of domains){
@@ -285,7 +286,10 @@ var renderDomainList = function(domains, renderTargetSelector){
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
   renderGraph();
-  // buildTypedUrlList();
+  
+  //Print out the lists of productive, unproductive, and undefinied domains to the console
+  console.log(getDomains());
+  
   renderDomainList(domains, "ul.domain-list-productive");
   var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
   for(var a of articles){
