@@ -74,75 +74,96 @@ for(var item of exampleDomains){
 //*/
 /**** END TEST DUMMY DATA ****/
 
+//=============================================================
+//Begin graph rendering code
+
+//AnalyticsRender class
+class AnalyticsRender{
+  constructor(domains){
+    this.categoryData = [{x: "Unknown", visits: 0}, {x: "Unproductive", visits: 0}, {x: "Productive", visits: 0}];
+    for(item of domains){
+        this.categoryData[item.productivity].visits += item.visits;
+      }
+  }
+
+  /*  Renders a Bar graph from data processed by renderGraph
+  *   Does not display or interact with time data at this time
+  *   Assumes data is from all of time
+  */
+  renderBarGraph() {
+    var colorScale = new Plottable.Scales.Color();
+    colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
+
+    var xScale = new Plottable.Scales.Category();
+    var yScale = new Plottable.Scales.Linear();
+
+    var xAxis = new Plottable.Axes.Category(xScale, "bottom");
+    var yAxis = new Plottable.Axes.Numeric(yScale, "left");
+
+    var baseVal = (this.categoryData[0].visits)/2;
+    for(item of this.categoryData){
+      if((item.visits/2) < baseVal){
+          baseVal = (item.visits/2);
+      }
+    }
+
+    var plot = new Plottable.Plots.Bar()
+      .addDataset(new Plottable.Dataset(this.categoryData))
+      .x(function(d) { return d.x; }, xScale)
+      .y(function(d) { return d.visits; }, yScale)
+      .animated(true)
+      .attr("fill", function(d) { return d.visits; }, colorScale)
+      .baselineValue(baseVal)
+      .labelsEnabled(true);
+    new Plottable.Components.Table([
+      [yAxis,plot],
+      [null,xAxis]
+    ]).renderTo("svg#graph");
+    window.addEventListener("resize", function() { plot.redraw(); });
+  }
+
+  /*
+  *   Renders a Pie graph from data processed by renderGraph
+  *   Does not display or interact with time data at this time
+  *   Assumes data is from all of time
+  */
+  renderPieGraph() {
+    var scale = new Plottable.Scales.Linear();
+    var colorScale = new Plottable.Scales.Color();
+    colorScale.range(["#0000FF", "#FF0000", "#FF00FF"]);
+    var legend = new Plottable.Components.Legend(colorScale)
+    colorScale.domain([this.categoryData[2].x,this.categoryData[1].x,this.categoryData[0].x]);
+    legend.xAlignment("left")
+    legend.yAlignment("top");
+
+    var plot = new Plottable.Plots.Pie()
+    .addDataset(new Plottable.Dataset(this.categoryData))
+    .sectorValue(function(d) { return d.visits; }, scale)
+    .innerRadius(0)
+    .attr("fill", function(d) { return d.x; }, colorScale)
+    .outerRadius(60)
+    .labelsEnabled(true)
+    .renderTo("svg#graph");
+    legend.renderTo("svg#graph")
+    window.addEventListener("resize", function() { plot.redraw(); });
+  }
+
+}
 
 /*
 *   recieve data to render and decide what to render
-*   renderGraph manages and decides which graph to render
-*   based on input
+*   renderGraph creates an AnalyticsRender object and tells it what to render and how based on data on input
+*   ### Might change name to graphRenderManager to better fit its purpose once
+*   currently takes AnalyticsRender class object, may change to create analyticsRender class object that calls history to request domain objects
 */
 var renderGraph = function(domains) {
   if(VERBOSE){ console.debug("FUNCTION CALL: renderGraph()"); }
-  var categoryData = [{x: "Unknown", visits: 0, value: 0}, {x: "Unproductive", visits: 0, value: 1}, {x: "Productive", visits: 0, value: 2}];
-  for(item of domains){
-    categoryData[item.productivity].visits += item.visits;
-  }
-  renderPieGraph(categoryData);
-  //renderBarGraph(categoryData);
+  var visual = new AnalyticsRender(domains);
+  visual.renderPieGraph();
 }
 
-var renderBarGraph = function (data) {
-  console.log(data);
-  var colorScale = new Plottable.Scales.Color();
-  colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
-
-  var xScale = new Plottable.Scales.Category();
-  var yScale = new Plottable.Scales.Linear();
-
-  var xAxis = new Plottable.Axes.Category(xScale, "bottom");
-  var yAxis = new Plottable.Axes.Numeric(yScale, "left");
-
-  var baseVal = (data[0].visits)/2;
-  for(item of data){
-    if((item.visits/2) < baseVal){
-        baseVal = (item.visits/2);
-    }
-  }
-
-  var plot = new Plottable.Plots.Bar()
-    .addDataset(new Plottable.Dataset(data))
-    .x(function(d) { return d.x; }, xScale)
-    .y(function(d) { return d.visits; }, yScale)
-    .animated(true)
-    .attr("fill", function(d) { return d.visits; }, colorScale)
-    .baselineValue(baseVal)
-    .labelsEnabled(true);
-  new Plottable.Components.Table([
-    [yAxis,plot],
-    [null,xAxis]
-  ]).renderTo("svg#graph");
-  window.addEventListener("resize", function() { plot.redraw(); });
-}
-
-var renderPieGraph = function (data) {
-  var scale = new Plottable.Scales.Linear();
-  var colorScale = new Plottable.Scales.Color();
-  colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
-  var legend = new Plottable.Components.Legend(colorScale)
-  colorScale.domain([data[0].x,data[1].x,data[2].x]);
-  legend.xAlignment("left")
-  legend.yAlignment("top");
-  
-  var plot = new Plottable.Plots.Pie()
-  .addDataset(new Plottable.Dataset(data))
-  .sectorValue(function(d) { return d.visits; }, scale)
-  .innerRadius(0)
-  .attr("fill", function(d) { return d.x; }, colorScale)
-  .outerRadius(60)
-  .labelsEnabled(true)
-  .renderTo("svg#graph");
-  legend.renderTo("svg#graph")
-  window.addEventListener("resize", function() { plot.redraw(); });
-}
+//End graph rendering code
+//======================================================================================
 
 //=============================================================
 //Begin history parsing code
