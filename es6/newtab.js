@@ -70,7 +70,6 @@ for(var item of exampleDomains){
   var d = new Domain(item);
   domains.push(d);
 }
-//*/
 /**** END TEST DUMMY DATA ****/
 
 //=============================================================
@@ -212,44 +211,10 @@ var fetchWikipediaArticle = function(titleName){
   }
 
   WIKIPEDIA.getData(wikiArticleLink, handleData);
-
-  /****
-  var wikiArticleLink = "http://en.wikipedia.org/wiki/Invasion_of_Normandy";
-  var handleData = function(data){
-
-    console.log(data.summary);
-    console.log(data.summary.title);
-
-    $("#title").html($("#title").html() + "" + data.summary.title);
-
-    console.log(data.summary.summary);
-    $("#summary").html($("#summary").html() + "" + data.summary.summary.substring(0,150) + "...");
-
-    console.log(data.summary.image);
-    //$("#image").html($("#image").html() + "" + data.summary.image);
-    $("#put-image-here").attr("src", imageLink(data));
-    $("#image-link").attr("href", wikiArticleLink);
-  }
-
-  function imageLink(data){
-    return data.summary.image;
-  }
-
-  var handleError = function handleError(error){
-    console.log(error);
-  }
-
-  */
 }
 
 var renderDomainList = function(domains, renderTargetSelector){
   if(VERBOSE){ console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector); }
-
-  //Somewhere in here throws the error
-  /*Uncaught EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' 
-    is not an allowed source of script in the following Content Security Policy directive:
-    "script-src 'self' blob: filesystem: chrome-extension-resource:".*/
-
   var str = "";
   for(var d of domains){
     d.setTemplate(domainListingTemplate);
