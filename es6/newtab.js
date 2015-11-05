@@ -174,7 +174,6 @@ var fetchWikipediaArticle = function(titleName){
 
   var wikiArticleLink = "http://en.wikipedia.org/wiki/" + titleName;
 
-
   var container = $(".wikipedia-container");
   var templateString = wikipediaArticleTemplate.join("\n");
   var compiled = _.template(templateString);
@@ -215,7 +214,9 @@ var fetchWikipediaArticle = function(titleName){
 
 var renderDomainList = function(domains, renderTargetSelector){
   if(VERBOSE){ console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector); }
+
   var str = "";
+
   for(var d of domains){
     d.setTemplate(domainListingTemplate);
     str += d.render();
@@ -228,13 +229,16 @@ var renderDomainList = function(domains, renderTargetSelector){
 
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
-  console.log(getDomains());
+
   renderGraph(exampleDomains);
   renderDomainList(domains, "ul.domain-list-productive");
+
   var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
+
   for(var a of articles){
     fetchWikipediaArticle(a);
   }
+
   renderDomainList(domains, "ul.domain-list-productive");
   renderGraph(exampleDomains);
 }

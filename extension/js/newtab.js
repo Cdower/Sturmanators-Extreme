@@ -304,7 +304,9 @@ var renderDomainList = function renderDomainList(domains, renderTargetSelector) 
   if (VERBOSE) {
     console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector);
   }
+
   var str = "";
+
   var _iteratorNormalCompletion4 = true;
   var _didIteratorError4 = false;
   var _iteratorError4 = undefined;
@@ -361,10 +363,12 @@ var DOMLoaded = function DOMLoaded() {
   if (VERBOSE) {
     console.debug("EVENT: DOMContentLoaded");
   }
-  console.log(getDomains());
+
   renderGraph(exampleDomains);
   renderDomainList(domains, "ul.domain-list-productive");
+
   var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
+
   var _iteratorNormalCompletion6 = true;
   var _didIteratorError6 = false;
   var _iteratorError6 = undefined;
