@@ -1,6 +1,6 @@
 wikipediaArticleTemplate = [
   "<div class='wikipedia-article'>",
-  	"<a href='http://www.google.com'>",
+  	"<a href= <%= link %> >",
     "<img class='wikipedia-article-image' height=30% width=30% src='<%= imageUrl %>'></img>",
     "<p class='wikipedia-article-title'>",
       "<%= title %>",

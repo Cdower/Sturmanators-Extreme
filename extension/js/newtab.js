@@ -151,8 +151,9 @@ var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
     var truncatedSummary = "not found";
     var imageUrl = "images/notfound.png";
     var title = "Article Could Not Be Fetched";
+    var link = "http://www.google.com";
 
-    console.log("Data summary is:" + data);
+    console.log("Link is" + wikiArticleLink);
 
     if (data.summary != undefined) {
       if (data.summary.title != undefined) {
@@ -171,7 +172,8 @@ var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
     var rendered = compiled({
       title: title,
       imageUrl: imageUrl,
-      summary: truncatedSummary
+      summary: truncatedSummary,
+      link: wikiArticleLink
     });
 
     container.append(rendered);
