@@ -1,5 +1,6 @@
 {
   "devDependencies": {
-    "wikijs": "^0.1.1"
+    "wikijs": "^0.1.1",
+    "wikipedia-js": "0.0.6"
   }
 }
