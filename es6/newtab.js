@@ -71,39 +71,74 @@ for(var item of exampleDomains){
   var d = new Domain(item);
   domains.push(d);
 }
-
+//*/
 /**** END TEST DUMMY DATA ****/
 
 
-var renderGraph = function() {
-  if(VERBOSE){ console.debug("FUNCTION CALL: renderGraph()"); }
+//var data = [{ val: 2, legend: "Productive" }, { val: 6, legend: "Unknown" }, { val: 4, legend: "Unproductive" }];
 
-  var xScale = new Plottable.Scales.Linear();
+var renderGraph = function(domains) { ///recieve data to render and decide what to render
+  if(VERBOSE){ console.debug("FUNCTION CALL: renderGraph()"); }
+  var categoryData = [{x: "Unknown", visits: 0, value: 0}, {x: "Unproductive", visits: 0, value: 1}, {x: "Productive", visits: 0, value: 2}];
+  for(item of domains){
+    categoryData[item.productivity].visits += item.visits;
+  }
+  //renderPieGraph(categoryData);
+  renderBarGraph(categoryData);
+}
+
+var renderBarGraph = function (data) {
+  console.log(data);
+  var colorScale = new Plottable.Scales.Color();
+  colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
+
+  var xScale = new Plottable.Scales.Category();
   var yScale = new Plottable.Scales.Linear();
 
-  var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
+  var xAxis = new Plottable.Axes.Category(xScale, "bottom");
   var yAxis = new Plottable.Axes.Numeric(yScale, "left");
 
-  var plot = new Plottable.Plots.Line();
-  plot.x(function(d) { return d.x; }, xScale);
-  plot.y(function(d) { return d.y; }, yScale);
+  var baseVal = (data[0].visits)/2;
+  for(item of data){
+    if((item.visits/2) < baseVal){
+        baseVal = (item.visits/2);
+    }
+  }
 
-  var data = [
-    { "x": 0, "y": 1 },
-    { "x": 1, "y": 2 },
-    { "x": 2, "y": 4 },
-    { "x": 3, "y": 8 }
-  ];
+  var plot = new Plottable.Plots.Bar()
+    .addDataset(new Plottable.Dataset(data))
+    .x(function(d) { return d.x; }, xScale)
+    .y(function(d) { return d.visits; }, yScale)
+    .animated(true)
+    .attr("fill", function(d) { return d.visits; }, colorScale)
+    .baselineValue(baseVal)
+    .labelsEnabled(true);
+  new Plottable.Components.Table([
+    [yAxis,plot],
+    [null,xAxis]
+  ]).renderTo("svg#graph");
+  window.addEventListener("resize", function() { plot.redraw(); });
+}
 
-  var dataset = new Plottable.Dataset(data);
-  plot.addDataset(dataset);
-
-  var chart = new Plottable.Components.Table([
-    [yAxis, plot],
-    [null, xAxis]
-  ]);
-
-  chart.renderTo("svg#graph");
+var renderPieGraph = function (data) {
+  var scale = new Plottable.Scales.Linear();
+  var colorScale = new Plottable.Scales.InterpolatedColor();
+  colorScale.range(["#BDCEF0", "#5279C7"]);
+  var legend = new Plottable.Components.Legend(colorScale)
+  colorScale.domain([data[0].visits,data[1].visits,data[2].visits]);
+  console.log(colorScale.domain());
+  legend.xAlignment("left")
+  legend.yAlignment("top");
+  
+  var plot = new Plottable.Plots.Pie()
+  .addDataset(new Plottable.Dataset(data))
+  .sectorValue(function(d) { return d.visits; }, scale)
+  .innerRadius(0)
+  .attr("fill", function(d) { return d.visits; }, colorScale)
+  .outerRadius(60)
+  .renderTo("svg#graph");
+  legend.renderTo("svg#graph")
+  window.addEventListener("resize", function() { plot.redraw(); });
 }
 
 //=============================================================
@@ -207,8 +242,8 @@ var renderDomainList = function(domains, renderTargetSelector){
 
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
-  renderGraph();
-  // buildTypedUrlList();
+  renderGraph(exampleDomains);
+  //buildTypedUrlList();
   renderDomainList(domains, "ul.domain-list-productive");
 }
 
