@@ -75,16 +75,19 @@ for(var item of exampleDomains){
 /**** END TEST DUMMY DATA ****/
 
 
-//var data = [{ val: 2, legend: "Productive" }, { val: 6, legend: "Unknown" }, { val: 4, legend: "Unproductive" }];
-
-var renderGraph = function(domains) { ///recieve data to render and decide what to render
+/*
+*   recieve data to render and decide what to render
+*   renderGraph manages and decides which graph to render
+*   based on input
+*/
+var renderGraph = function(domains) {
   if(VERBOSE){ console.debug("FUNCTION CALL: renderGraph()"); }
   var categoryData = [{x: "Unknown", visits: 0, value: 0}, {x: "Unproductive", visits: 0, value: 1}, {x: "Productive", visits: 0, value: 2}];
   for(item of domains){
     categoryData[item.productivity].visits += item.visits;
   }
-  //renderPieGraph(categoryData);
-  renderBarGraph(categoryData);
+  renderPieGraph(categoryData);
+  //renderBarGraph(categoryData);
 }
 
 var renderBarGraph = function (data) {
@@ -122,11 +125,10 @@ var renderBarGraph = function (data) {
 
 var renderPieGraph = function (data) {
   var scale = new Plottable.Scales.Linear();
-  var colorScale = new Plottable.Scales.InterpolatedColor();
-  colorScale.range(["#BDCEF0", "#5279C7"]);
+  var colorScale = new Plottable.Scales.Color();
+  colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
   var legend = new Plottable.Components.Legend(colorScale)
-  colorScale.domain([data[0].visits,data[1].visits,data[2].visits]);
-  console.log(colorScale.domain());
+  colorScale.domain([data[0].x,data[1].x,data[2].x]);
   legend.xAlignment("left")
   legend.yAlignment("top");
   
@@ -134,8 +136,9 @@ var renderPieGraph = function (data) {
   .addDataset(new Plottable.Dataset(data))
   .sectorValue(function(d) { return d.visits; }, scale)
   .innerRadius(0)
-  .attr("fill", function(d) { return d.visits; }, colorScale)
+  .attr("fill", function(d) { return d.x; }, colorScale)
   .outerRadius(60)
+  .labelsEnabled(true)
   .renderTo("svg#graph");
   legend.renderTo("svg#graph")
   window.addEventListener("resize", function() { plot.redraw(); });
