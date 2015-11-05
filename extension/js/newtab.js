@@ -95,7 +95,11 @@ try {
   //*/
   /**** END TEST DUMMY DATA ****/
 
-  //var data = [{ val: 2, legend: "Productive" }, { val: 6, legend: "Unknown" }, { val: 4, legend: "Unproductive" }];
+  /*
+  *   recieve data to render and decide what to render
+  *   renderGraph manages and decides which graph to render
+  *   based on input
+  */
 } catch (err) {
   _didIteratorError = true;
   _iteratorError = err;
@@ -112,7 +116,6 @@ try {
 }
 
 var renderGraph = function renderGraph(domains) {
-  ///recieve data to render and decide what to render
   if (VERBOSE) {
     console.debug("FUNCTION CALL: renderGraph()");
   }
@@ -127,7 +130,6 @@ var renderGraph = function renderGraph(domains) {
 
       categoryData[item.productivity].visits += item.visits;
     }
-    //renderPieGraph(categoryData);
   } catch (err) {
     _didIteratorError2 = true;
     _iteratorError2 = err;
@@ -143,7 +145,8 @@ var renderGraph = function renderGraph(domains) {
     }
   }
 
-  renderBarGraph(categoryData);
+  renderPieGraph(categoryData);
+  //renderBarGraph(categoryData);
 };
 
 var renderBarGraph = function renderBarGraph(data) {
@@ -200,19 +203,18 @@ var renderBarGraph = function renderBarGraph(data) {
 
 var renderPieGraph = function renderPieGraph(data) {
   var scale = new Plottable.Scales.Linear();
-  var colorScale = new Plottable.Scales.InterpolatedColor();
-  colorScale.range(["#BDCEF0", "#5279C7"]);
+  var colorScale = new Plottable.Scales.Color();
+  colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
   var legend = new Plottable.Components.Legend(colorScale);
-  colorScale.domain([data[0].visits, data[1].visits, data[2].visits]);
-  console.log(colorScale.domain());
+  colorScale.domain([data[0].x, data[1].x, data[2].x]);
   legend.xAlignment("left");
   legend.yAlignment("top");
 
   var plot = new Plottable.Plots.Pie().addDataset(new Plottable.Dataset(data)).sectorValue(function (d) {
     return d.visits;
   }, scale).innerRadius(0).attr("fill", function (d) {
-    return d.visits;
-  }, colorScale).outerRadius(60).renderTo("svg#graph");
+    return d.x;
+  }, colorScale).outerRadius(60).labelsEnabled(true).renderTo("svg#graph");
   legend.renderTo("svg#graph");
   window.addEventListener("resize", function () {
     plot.redraw();
