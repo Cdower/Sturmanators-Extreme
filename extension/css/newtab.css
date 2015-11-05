@@ -19,10 +19,11 @@ li {
 .wikipedia-container{
   font-size: 15px;
   font-color: rgba(0,0,10,0.8);
+  margin-bottom: 5px;
 }
 
 .wikipedia-article-title{
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .wikipedia-article{
