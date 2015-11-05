@@ -220,10 +220,6 @@ function buildTypedUrlList() {
 //End History pasing code
 //======================================================================================
 
-handleData();
-
-fetchWikipediaArticle.handleData();
-
 var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
 
   var wikiArticleLink = "http://en.wikipedia.org/wiki/" + titleName;
