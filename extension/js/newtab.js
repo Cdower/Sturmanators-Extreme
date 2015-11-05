@@ -92,8 +92,10 @@ try {
     var d = new Domain(item);
     domains.push(d);
   }
-
+  //*/
   /**** END TEST DUMMY DATA ****/
+
+  //var data = [{ val: 2, legend: "Productive" }, { val: 6, legend: "Unknown" }, { val: 4, legend: "Unproductive" }];
 } catch (err) {
   _didIteratorError = true;
   _iteratorError = err;
@@ -109,33 +111,112 @@ try {
   }
 }
 
-var renderGraph = function renderGraph() {
+var renderGraph = function renderGraph(domains) {
+  ///recieve data to render and decide what to render
   if (VERBOSE) {
     console.debug("FUNCTION CALL: renderGraph()");
   }
+  var categoryData = [{ x: "Unknown", visits: 0, value: 0 }, { x: "Unproductive", visits: 0, value: 1 }, { x: "Productive", visits: 0, value: 2 }];
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
 
-  var xScale = new Plottable.Scales.Linear();
+  try {
+    for (var _iterator2 = domains[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      item = _step2.value;
+
+      categoryData[item.productivity].visits += item.visits;
+    }
+    //renderPieGraph(categoryData);
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+        _iterator2["return"]();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
+      }
+    }
+  }
+
+  renderBarGraph(categoryData);
+};
+
+var renderBarGraph = function renderBarGraph(data) {
+  console.log(data);
+  var colorScale = new Plottable.Scales.Color();
+  colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
+
+  var xScale = new Plottable.Scales.Category();
   var yScale = new Plottable.Scales.Linear();
 
-  var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
+  var xAxis = new Plottable.Axes.Category(xScale, "bottom");
   var yAxis = new Plottable.Axes.Numeric(yScale, "left");
 
-  var plot = new Plottable.Plots.Line();
-  plot.x(function (d) {
+  var baseVal = data[0].visits / 2;
+  var _iteratorNormalCompletion3 = true;
+  var _didIteratorError3 = false;
+  var _iteratorError3 = undefined;
+
+  try {
+    for (var _iterator3 = data[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+      item = _step3.value;
+
+      if (item.visits / 2 < baseVal) {
+        baseVal = item.visits / 2;
+      }
+    }
+  } catch (err) {
+    _didIteratorError3 = true;
+    _iteratorError3 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion3 && _iterator3["return"]) {
+        _iterator3["return"]();
+      }
+    } finally {
+      if (_didIteratorError3) {
+        throw _iteratorError3;
+      }
+    }
+  }
+
+  var plot = new Plottable.Plots.Bar().addDataset(new Plottable.Dataset(data)).x(function (d) {
     return d.x;
-  }, xScale);
-  plot.y(function (d) {
-    return d.y;
-  }, yScale);
+  }, xScale).y(function (d) {
+    return d.visits;
+  }, yScale).animated(true).attr("fill", function (d) {
+    return d.visits;
+  }, colorScale).baselineValue(baseVal).labelsEnabled(true);
+  new Plottable.Components.Table([[yAxis, plot], [null, xAxis]]).renderTo("svg#graph");
+  window.addEventListener("resize", function () {
+    plot.redraw();
+  });
+};
 
-  var data = [{ "x": 0, "y": 1 }, { "x": 1, "y": 2 }, { "x": 2, "y": 4 }, { "x": 3, "y": 8 }];
+var renderPieGraph = function renderPieGraph(data) {
+  var scale = new Plottable.Scales.Linear();
+  var colorScale = new Plottable.Scales.InterpolatedColor();
+  colorScale.range(["#BDCEF0", "#5279C7"]);
+  var legend = new Plottable.Components.Legend(colorScale);
+  colorScale.domain([data[0].visits, data[1].visits, data[2].visits]);
+  console.log(colorScale.domain());
+  legend.xAlignment("left");
+  legend.yAlignment("top");
 
-  var dataset = new Plottable.Dataset(data);
-  plot.addDataset(dataset);
-
-  var chart = new Plottable.Components.Table([[yAxis, plot], [null, xAxis]]);
-
-  chart.renderTo("svg#graph");
+  var plot = new Plottable.Plots.Pie().addDataset(new Plottable.Dataset(data)).sectorValue(function (d) {
+    return d.visits;
+  }, scale).innerRadius(0).attr("fill", function (d) {
+    return d.visits;
+  }, colorScale).outerRadius(60).renderTo("svg#graph");
+  legend.renderTo("svg#graph");
+  window.addEventListener("resize", function () {
+    plot.redraw();
+  });
 };
 
 var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
@@ -151,9 +232,6 @@ var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
     var truncatedSummary = "not found";
     var imageUrl = "images/notfound.png";
     var title = "Article Could Not Be Fetched";
-    var link = "http://www.google.com";
-
-    console.log("Link is" + wikiArticleLink);
 
     if (data.summary != undefined) {
       if (data.summary.title != undefined) {
@@ -172,8 +250,7 @@ var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
     var rendered = compiled({
       title: title,
       imageUrl: imageUrl,
-      summary: truncatedSummary,
-      link: wikiArticleLink
+      summary: truncatedSummary
     });
 
     container.append(rendered);
@@ -184,23 +261,23 @@ var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
   /****
   var wikiArticleLink = "http://en.wikipedia.org/wiki/Invasion_of_Normandy";
   var handleData = function(data){
-      console.log(data.summary);
+     console.log(data.summary);
     console.log(data.summary.title);
-      $("#title").html($("#title").html() + "" + data.summary.title);
-      console.log(data.summary.summary);
+     $("#title").html($("#title").html() + "" + data.summary.title);
+     console.log(data.summary.summary);
     $("#summary").html($("#summary").html() + "" + data.summary.summary.substring(0,150) + "...");
-      console.log(data.summary.image);
+     console.log(data.summary.image);
     //$("#image").html($("#image").html() + "" + data.summary.image);
     $("#put-image-here").attr("src", imageLink(data));
     $("#image-link").attr("href", wikiArticleLink);
   }
-    function imageLink(data){
+   function imageLink(data){
     return data.summary.image;
   }
-    var handleError = function handleError(error){
+   var handleError = function handleError(error){
     console.log(error);
   }
-    */
+   */
 };
 
 var renderDomainList = function renderDomainList(domains, renderTargetSelector) {
@@ -214,79 +291,16 @@ var renderDomainList = function renderDomainList(domains, renderTargetSelector) 
     "script-src 'self' blob: filesystem: chrome-extension-resource:".*/
 
   var str = "";
-  var _iteratorNormalCompletion2 = true;
-  var _didIteratorError2 = false;
-  var _iteratorError2 = undefined;
-
-  try {
-    for (var _iterator2 = domains[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-      var d = _step2.value;
-
-      d.setTemplate(domainListingTemplate);
-      str += d.render();
-    }
-  } catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-        _iterator2["return"]();
-      }
-    } finally {
-      if (_didIteratorError2) {
-        throw _iteratorError2;
-      }
-    }
-  }
-
-  var _iteratorNormalCompletion3 = true;
-  var _didIteratorError3 = false;
-  var _iteratorError3 = undefined;
-
-  try {
-    for (var _iterator3 = $(renderTargetSelector)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-      var n = _step3.value;
-
-      n.innerHTML = str;
-    }
-  } catch (err) {
-    _didIteratorError3 = true;
-    _iteratorError3 = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion3 && _iterator3["return"]) {
-        _iterator3["return"]();
-      }
-    } finally {
-      if (_didIteratorError3) {
-        throw _iteratorError3;
-      }
-    }
-  }
-};
-
-var DOMLoaded = function DOMLoaded() {
-  if (VERBOSE) {
-    console.debug("EVENT: DOMContentLoaded");
-  }
-  renderGraph();
-
-  //Print out the lists of productive, unproductive, and undefinied domains to the console
-  console.log(getDomains());
-
-  renderDomainList(domains, "ul.domain-list-productive");
-  var articles = ["C++", "Entrepreneurship", "Google"];
   var _iteratorNormalCompletion4 = true;
   var _didIteratorError4 = false;
   var _iteratorError4 = undefined;
 
   try {
-    for (var _iterator4 = articles[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-      var a = _step4.value;
+    for (var _iterator4 = domains[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+      var d = _step4.value;
 
-      fetchWikipediaArticle(a);
-      console.log("article is: " + a);
+      d.setTemplate(domainListingTemplate);
+      str += d.render();
     }
   } catch (err) {
     _didIteratorError4 = true;
@@ -299,6 +313,65 @@ var DOMLoaded = function DOMLoaded() {
     } finally {
       if (_didIteratorError4) {
         throw _iteratorError4;
+      }
+    }
+  }
+
+  var _iteratorNormalCompletion5 = true;
+  var _didIteratorError5 = false;
+  var _iteratorError5 = undefined;
+
+  try {
+    for (var _iterator5 = $(renderTargetSelector)[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+      var n = _step5.value;
+
+      n.innerHTML = str;
+    }
+  } catch (err) {
+    _didIteratorError5 = true;
+    _iteratorError5 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion5 && _iterator5["return"]) {
+        _iterator5["return"]();
+      }
+    } finally {
+      if (_didIteratorError5) {
+        throw _iteratorError5;
+      }
+    }
+  }
+};
+
+var DOMLoaded = function DOMLoaded() {
+  if (VERBOSE) {
+    console.debug("EVENT: DOMContentLoaded");
+  }
+  console.log(getDomains());
+  renderGraph(exampleDomains);
+  renderDomainList(domains, "ul.domain-list-productive");
+  var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
+  var _iteratorNormalCompletion6 = true;
+  var _didIteratorError6 = false;
+  var _iteratorError6 = undefined;
+
+  try {
+    for (var _iterator6 = articles[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+      var a = _step6.value;
+
+      fetchWikipediaArticle(a);
+    }
+  } catch (err) {
+    _didIteratorError6 = true;
+    _iteratorError6 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion6 && _iterator6["return"]) {
+        _iterator6["return"]();
+      }
+    } finally {
+      if (_didIteratorError6) {
+        throw _iteratorError6;
       }
     }
   }
