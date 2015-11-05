@@ -78,6 +78,7 @@ for(var item of exampleDomains){
 //Begin graph rendering code
 
 //AnalyticsRender class
+//Grooms list of domain objects for render by graphing methods
 class AnalyticsRender{
   constructor(domains){
     this.categoryData = [{x: "Unknown", visits: 0}, {x: "Unproductive", visits: 0}, {x: "Productive", visits: 0}];
@@ -159,7 +160,10 @@ class AnalyticsRender{
 var renderGraph = function(domains) {
   if(VERBOSE){ console.debug("FUNCTION CALL: renderGraph()"); }
   var visual = new AnalyticsRender(domains);
+
+  //watch buttons here
   visual.renderPieGraph();
+  //visual.renderBarGraph();
 }
 
 //End graph rendering code
@@ -266,9 +270,9 @@ var renderDomainList = function(domains, renderTargetSelector){
 
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
-  renderGraph(exampleDomains);
   //buildTypedUrlList();
   renderDomainList(domains, "ul.domain-list-productive");
+  renderGraph(exampleDomains);
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);

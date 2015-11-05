@@ -100,6 +100,7 @@ try {
   //Begin graph rendering code
 
   //AnalyticsRender class
+  //Grooms list of domain objects for render by graphing methods
 } catch (err) {
   _didIteratorError = true;
   _iteratorError = err;
@@ -247,7 +248,10 @@ var renderGraph = function renderGraph(domains) {
     console.debug("FUNCTION CALL: renderGraph()");
   }
   var visual = new AnalyticsRender(domains);
+
+  //watch buttons here
   visual.renderPieGraph();
+  //visual.renderBarGraph();
 };
 
 //End graph rendering code
@@ -397,9 +401,9 @@ var DOMLoaded = function DOMLoaded() {
   if (VERBOSE) {
     console.debug("EVENT: DOMContentLoaded");
   }
-  renderGraph(exampleDomains);
   //buildTypedUrlList();
   renderDomainList(domains, "ul.domain-list-productive");
+  renderGraph(exampleDomains);
 };
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);
