@@ -234,6 +234,8 @@ var fetchWikipediaArticle = function fetchWikipediaArticle(titleName) {
     var imageUrl = "images/notfound.png";
     var title = "Article Could Not Be Fetched";
 
+    console.log("Data summary is:" + data);
+
     if (data.summary != undefined) {
       if (data.summary.title != undefined) {
         title = data.summary.title;
@@ -354,7 +356,7 @@ var DOMLoaded = function DOMLoaded() {
   console.log(getDomains());
 
   renderDomainList(domains, "ul.domain-list-productive");
-  var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
+  var articles = ["C++", "Entrepreneurship", "Google"];
   var _iteratorNormalCompletion4 = true;
   var _didIteratorError4 = false;
   var _iteratorError4 = undefined;
@@ -364,6 +366,7 @@ var DOMLoaded = function DOMLoaded() {
       var a = _step4.value;
 
       fetchWikipediaArticle(a);
+      console.log("article is: " + a);
     }
   } catch (err) {
     _didIteratorError4 = true;
