@@ -175,5 +175,7 @@ var StartAllTests = function(){
 }
 
 
-document.addEventListener('DOMContentLoaded', StartAllTests, false);
+if(TESTING){
+  document.addEventListener('DOMContentLoaded', StartAllTests, false);
+}
 

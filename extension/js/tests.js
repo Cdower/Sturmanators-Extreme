@@ -219,4 +219,6 @@ var StartAllTests = function StartAllTests() {
   StartGraphingTests();
 };
 
-document.addEventListener('DOMContentLoaded', StartAllTests, false);
+if (TESTING) {
+  document.addEventListener('DOMContentLoaded', StartAllTests, false);
+}
