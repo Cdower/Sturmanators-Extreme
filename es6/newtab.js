@@ -1,4 +1,5 @@
 var VERBOSE = true;
+var TESTING = true;
 
 class Domain {
   constructor(options){
@@ -36,41 +37,6 @@ class Domain {
   }
 }
 
-
-/**** TEST DUMMY DATA ****/
-var exampleDomains = [
-  {
-    domain: "domain.com",
-    visits: 58,
-    lastSevenDays: null,
-    productivity: 2,
-  },
-  {
-    domain: "bomb.com",
-    visits: 68,
-    lastSevenDays: null,
-    productivity: 1,
-  },
-  {
-    domain: "wombo.com",
-    visits: 20,
-    lastSevenDays: null,
-    productivity: 1
-  },
-  {
-    domain: "everybodywombo.com",
-    visits: 90,
-    lastSevenDays: null,
-    productivity: 0
-  },
-];
-
-var domains = [];
-for(var item of exampleDomains){
-  var d = new Domain(item);
-  domains.push(d);
-}
-/**** END TEST DUMMY DATA ****/
 
 //=============================================================
 //Begin graph rendering code
@@ -170,46 +136,51 @@ var renderGraph = function(domains) {
 //=============================================================
 //Begin history parsing code
 
-var fetchWikipediaArticle = function(titleName){
+var constructWikiLink = function(title){
+  return "http://en.wikipedia.org/wiki/" + title;
+}
 
-  var wikiArticleLink = "http://en.wikipedia.org/wiki/" + titleName;
-
-  var container = $(".wikipedia-container");
+var renderWikiData = function(data, link, container){
+  // Compile article template
   var templateString = wikipediaArticleTemplate.join("\n");
   var compiled = _.template(templateString);
 
-  var handleData = function(data){
+  // Fallback cases for when API call fails
+  var truncatedSummary = "Article could not be fetched...";
+  var imageUrl = "images/notfound.png";
+  var title = "";
 
-    var truncatedSummary = "not found";
-    var imageUrl = "images/notfound.png";
-    var title = "Article Could Not Be Fetched";
-    var link = wikiArticleLink;
-
-    if(data.summary != undefined){
-      if(data.summary.title != undefined){
-        title = data.summary.title;
-      }
-
-      if(data.summary.image != undefined){
-        imageUrl = data.summary.image;
-      }
-
-      if(data.summary.summary != undefined){
-        truncatedSummary = data.summary.summary.substring(0,150) + "...";
-      }
+  if(data.summary != undefined){
+    if(data.summary.title != undefined){
+      title = data.summary.title;
     }
 
-    var rendered = compiled({
-      title: title,
-      imageUrl: imageUrl,
-      summary: truncatedSummary,
-      link: link
-    });
+    if(data.summary.image != undefined){
+      imageUrl = data.summary.image;
+    }
 
-    container.append(rendered);
+    if(data.summary.summary != undefined){
+      truncatedSummary = data.summary.summary.substring(0,150) + "...";
+    }
   }
 
-  WIKIPEDIA.getData(wikiArticleLink, handleData);
+  var rendered = compiled({
+    title: title,
+    imageUrl: imageUrl,
+    summary: truncatedSummary,
+    link: link
+  });
+
+  container.append(rendered);
+}
+
+var fetchWikipediaArticle = function(titleName, callback, container){
+
+  var wikiArticleLink = constructWikiLink(titleName);
+
+  WIKIPEDIA.getData(wikiArticleLink, function(data){
+      callback(data, wikiArticleLink, container);
+  });
 }
 
 var renderDomainList = function(domains, renderTargetSelector){
@@ -230,17 +201,15 @@ var renderDomainList = function(domains, renderTargetSelector){
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
 
-  renderGraph(exampleDomains);
   renderDomainList(domains, "ul.domain-list-productive");
 
   var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
 
   for(var a of articles){
-    fetchWikipediaArticle(a);
+    fetchWikipediaArticle(a, renderWikiData, $(".wikipedia-container"));
   }
 
   renderDomainList(domains, "ul.domain-list-productive");
-  renderGraph(exampleDomains);
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);
