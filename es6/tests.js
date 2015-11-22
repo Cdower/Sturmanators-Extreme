@@ -1,5 +1,3 @@
-
-
 var TestDomains = [
   {
     domain: "domain.com",
@@ -27,12 +25,12 @@ var TestDomains = [
   },
 ];
 
+
 var domains = [];
 for(var item of TestDomains){
   var d = new Domain(item);
   domains.push(d);
 }
-
 
 
 var TestWikipediaArticles = [
@@ -53,6 +51,7 @@ var TestWikipediaArticles = [
   }
 ];
 
+
 var StartDependencyTests = function(){
   if($ == undefined){
     console.error("FAILED: jQuery dependency missing");
@@ -67,6 +66,7 @@ var StartDependencyTests = function(){
     console.error("FAILED: Plottable dependency missing");
   }
 }
+
 
 var testAPICall = function(response){
   var error = 0;
@@ -101,9 +101,9 @@ var testAPICall = function(response){
     console.debug("SUCCESS: API formatting OK");
   }
 
-
   return returnObj;
 }
+
 
 var StartAPITests = function(testArticles, testTarget){
   console.debug("Starting API tests...");
@@ -119,6 +119,7 @@ var StartAPITests = function(testArticles, testTarget){
     testArticlesOnDOM(testArticles, testTarget);
   }, 5000);
 }
+
 
 var testArticlesOnDOM = function(articles, target){
   var error = 0;
@@ -147,8 +148,10 @@ var testArticlesOnDOM = function(articles, target){
   }
 }
 
+
 var StartDomainTests = function(){
 }
+
 
 var StartGraphingTests = function(){
 }
@@ -170,6 +173,7 @@ var StartAllTests = function(){
   StartDomainTests();
   StartGraphingTests();
 }
+
 
 document.addEventListener('DOMContentLoaded', StartAllTests, false);
 
