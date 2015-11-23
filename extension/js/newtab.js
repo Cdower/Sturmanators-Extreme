@@ -355,6 +355,7 @@ var DOMLoaded = function DOMLoaded() {
   });
   getDomains(startTime, endTime, function (domains) {
     console.log(domains);
+    renderGraph(domains);
   });
 };
 

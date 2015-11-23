@@ -213,8 +213,8 @@ var DOMLoaded = function() {
   var startTime = endTime - (1000*60*60*12);
   
   getTimeSlots(startTime,endTime, function(domains){console.log(domains);});
-  getDomains(startTime,endTime, function(domains){console.log(domains);});
-   
+  getDomains(startTime,endTime, function(domains){console.log(domains);
+                                                  renderGraph(domains);});
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);

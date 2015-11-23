@@ -19,7 +19,7 @@ var isListed = function isListed(url, list) {
 /*This is purely sample information. This is not meant to in any way represent the 
   sort of domains we'll be filtereing out */
 var naughtyDomains = ["facebook.com", "buzzfeed.com", "reddit.com", "www.youtube.com", "i.imgur.com"];
-var niceDomains = ["wikipedia", "news.ycombinator", "stackoverflow", "lms9.rpi.edu", "docs.google.com"];
+var niceDomains = ["wikipedia", "news.ycombinator", "stackoverflow", "lms9.rpi.edu", "docs.google.com", "mail.google.com"];
 
 //End helper functions
 //=====================================================================
@@ -94,10 +94,7 @@ function getTimeSlots(startTime, endTime, callback) {
 function getDomains(startTime, endTime, callback) {
 
   //Return object containing the three domain lists
-  var domains = {
-    niceList: [],
-    naughtyList: [],
-    neutralList: [] };
+  var domains = [];
 
   //Test URL parsing using purl. This returns github.com to the console.
   //console.log(purl("https://github.com/allmarkedup/purl/tree/master/test").attr('host'));
@@ -121,12 +118,15 @@ function getDomains(startTime, endTime, callback) {
       //Use the purl library to extract the domain from a url
       //https://github.com/allmarkedup/purl
       var parsedURL = purl(historyItems[visit].url).attr('host');
-
+      //console.log(historyItems[visit]);
       //Count the visits to a url
       if (!urlToCount[parsedURL]) {
         urlToCount[parsedURL] = 0;
       }
       urlToCount[parsedURL]++;
+
+      //This gives the total times a url was visited, but not the total times in our limited time slot.
+      //historyItems[visit].visitCount;
     }
 
     //Raw visit info for debugging purposes
@@ -135,25 +135,27 @@ function getDomains(startTime, endTime, callback) {
     /*For each of the urls add them and their view counter to their 
      respective productive or unproductive lists */
     for (var url in urlToCount) {
+      var productivityClass = 0;
       if (isListed(url, niceDomains)) {
         //make an object with a url and views attribute and push it to the list.
-        domains.niceList.push({ url: url, views: urlToCount[url] });
+        productivityClass = 2;
       } else if (isListed(url, naughtyDomains)) {
-        domains.naughtyList.push({ url: url, views: urlToCount[url] });
-      } else {
-        domains.neutralList.push({ url: url, views: urlToCount[url] });
+        productivityClass = 1;
       }
+      domains.push({ domain: url,
+        visits: urlToCount[url],
+        productivity: productivityClass });
     }
 
     //Simple sorting operator
     function domainSort(a, b) {
-      return b.views - a.views;
+      return b.visits - a.visits;
     };
 
     //Sort each of the lists, putting the most viewed domains first.
-    domains.niceList.sort(domainSort);
-    domains.naughtyList.sort(domainSort);
-    domains.neutralList.sort(domainSort);
+    domains.sort(domainSort);
+    //domains.naughtyList.sort(domainSort);
+    //domains.neutralList.sort(domainSort);
 
     callback(domains);
   });
