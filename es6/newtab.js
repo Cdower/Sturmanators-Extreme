@@ -133,9 +133,6 @@ var renderGraph = function(domains) {
 //End graph rendering code
 //======================================================================================
 
-//=============================================================
-//Begin history parsing code
-
 var constructWikiLink = function(title){
   return "http://en.wikipedia.org/wiki/" + title;
 }
@@ -210,6 +207,14 @@ var DOMLoaded = function() {
   }
 
   renderDomainList(domains, "ul.domain-list-productive");
+
+  var endTime = (new Date).getTime();
+  //The time 12 hours ago. Milleseconds * seconds * minutes * hours
+  var startTime = endTime - (1000*60*60*12);
+  
+  getTimeSlots(startTime,endTime, function(domains){console.log(domains);});
+  getDomains(startTime,endTime, function(domains){console.log(domains);});
+   
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);
