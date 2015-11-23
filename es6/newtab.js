@@ -109,7 +109,7 @@ class AnalyticsRender{
     .outerRadius(60)
     .labelsEnabled(true)
     .renderTo("svg#graph");
-    legend.renderTo("svg#graph")
+    legend.renderTo("svg#legend")
     window.addEventListener("resize", function() { plot.redraw(); });
   }
 

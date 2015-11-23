@@ -180,7 +180,7 @@ var AnalyticsRender = (function () {
       }, scale).innerRadius(0).attr("fill", function (d) {
         return d.x;
       }, colorScale).outerRadius(60).labelsEnabled(true).renderTo("svg#graph");
-      legend.renderTo("svg#graph");
+      legend.renderTo("svg#legend");
       window.addEventListener("resize", function () {
         plot.redraw();
       });
