@@ -13,15 +13,34 @@ var isListed = function isListed(url, list) {
   return false;
 };
 
-//2 arrays that hold the naughty, and nice URLs.
-//at some point we'll move this to persistant storage
-
-/*This is purely sample information. This is not meant to in any way represent the 
-  sort of domains we'll be filtereing out */
-var naughtyDomains = ["facebook.com", "buzzfeed.com", "reddit.com", "www.youtube.com", "i.imgur.com"];
-var niceDomains = ["wikipedia", "news.ycombinator", "stackoverflow", "lms9.rpi.edu", "docs.google.com", "mail.google.com"];
-
 //End helper functions
+//=====================================================================
+
+//=====================================================================
+//This block of functions handles storing the naughty and nice domains in persitent memory.
+
+//Initial domains to populate storage with.
+var initialNaughtyDomains = ["facebook.com", "buzzfeed.com", "reddit.com", "www.youtube.com", "i.imgur.com"];
+var initialNiceDomains = ["wikipedia", "news.ycombinator", "stackoverflow", "lms9.rpi.edu", "docs.google.com", "mail.google.com"];
+
+/*A function that returns whether a domain is nice, naughty, or undefined
+0:Undefined
+1:Naughty
+2:Nice
+*/
+var getNiceness = function getNiceness(url) {
+
+  return 0;
+};
+
+/*A function that sets a domain to either nice, naughty, or undefined
+0:Undefined
+1:Naughty
+2:Nice
+*/
+var setNiceness = function setNiceness(url) {};
+
+//End Domain List Functions
 //=====================================================================
 
 //We need to return a couple of metrics:
