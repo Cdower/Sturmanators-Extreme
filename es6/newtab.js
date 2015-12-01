@@ -1,5 +1,5 @@
 var VERBOSE = true;
-var TESTING = true;
+var TESTING = false;
 
 class Domain {
   constructor(options){
@@ -206,21 +206,27 @@ var DOMLoaded = function() {
     fetchWikipediaArticle(a, renderWikiData, $(".wikipedia-container"));
   }
 
-  renderDomainList(domains, "ul.domain-list-productive");
+  //renderDomainList(domains, "ul.domain-list-productive");
 
   var endTime = (new Date).getTime();
   //The time 12 hours ago. Milleseconds * seconds * minutes * hours
   var startTime = endTime - (1000*60*60*12);
   
-  getTimeSlots(startTime,endTime, function(domains){console.log(domains);});
-  getDomains(startTime,endTime, function(domains){console.log(domains);
-                                                  renderGraph(domains);});
-  //console.log(chrome.storage);
-  setNiceness("https://developer.chrome.com/extensions/storage" , 1);
-  getNiceness("https://developer.chrome.com/extensions/storage",function(niceness){
-    console.log("getting object from storage");
-    console.log(niceness);
+  //getTimeSlots(startTime,endTime, function(domains){console.log(domains);});
+  
+  /*setNiceness("https://developer.chromiuminoid.com/extensions/storage" , 3, function(){
+      getNiceness("https://developer.chromiuminoid.com/extensions/storage",function(niceness){
+      console.log("getting object from storage");
+      console.log(niceness);
+    });
+  });*/
+  
+  //This has to be blocking so that the domains can populate before evaluating the history
+  initializeDomains(function(){
+    getDomains(startTime,endTime, function(domains){console.log(domains);
+                                                  renderGraph(domains);});  
   });
+  
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);

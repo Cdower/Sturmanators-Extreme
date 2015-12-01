@@ -8,7 +8,7 @@ var VERBOSE = true;
 //Begin helper functions
 
 //Initial domains to populate storage with.
-var naughtyDomains = ["facebook.com", "buzzfeed.com", "reddit.com", "www.youtube.com", "i.imgur.com"];
+var naughtyDomains = ["facebook.com", "buzzfeed.com", "www.reddit.com", "www.youtube.com", "imgur.com"];
 var niceDomains = ["wikipedia", "news.ycombinator", "stackoverflow", "lms9.rpi.edu", "docs.google.com", "mail.google.com"];
 
 //Function that returns true if an item in a list is contained in url
@@ -41,16 +41,66 @@ var getNiceness = function getNiceness(url, callback) {
   return 0;
 };
 
+var getUniqueID = function getUniqueID(callback) {
+  chrome.storage.local.get("uniqueID", function (obj) {
+    var ID = 0;
+
+    if (!isEmpty(obj)) {
+      ID = obj.uniqueID + 1;
+    }
+
+    console.log("Got unique ID of %s", ID);
+
+    chrome.storage.local.set({ uniqueID: ID }, function () {
+      callback(ID);
+    });
+  });
+};
+
 /*A function that sets a domain to either nice, naughty, or undefined
 0:Undefined
 1:Naughty
 2:Nice
 */
-var setNiceness = function setNiceness(url, niceness) {
+var setNiceness = function setNiceness(url, niceness, callback) {
 
   url = purl(url).attr('host');
 
-  chrome.storage.local.set(_defineProperty({}, url, niceness));
+  chrome.storage.local.get([url], function (obj) {
+    if (isEmpty(obj)) {
+      getUniqueID(function (id) {
+        chrome.storage.local.set(_defineProperty({}, url, { niceness: niceness, id: id }), callback);
+      });
+    } else {
+      chrome.storage.local.set(_defineProperty({}, url, { niceness: niceness, id: obj[url].id }), callback);
+    }
+  });
+};
+
+function isEmpty(obj) {
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) return false;
+  }
+  return true;
+}
+
+var initializeDomains = function initializeDomains(callback) {
+
+  getNiceness("configured", function (preset) {
+    if (isEmpty(preset)) {
+      console.log("Adding domains for the first time");
+
+      setNiceness("configured", 0);
+
+      for (var url in niceDomains) {
+        setNiceness(url, 2);
+      }
+      for (var url in naughtyDomains) {
+        setNiceness(url, 1);
+      }
+    }
+    callback();
+  });
 };
 
 //End Domain List Functions
@@ -166,30 +216,42 @@ function getDomains(startTime, endTime, callback) {
 
     /*For each of the urls add them and their view counter to their 
      respective productive or unproductive lists */
+    var domainsToCount = urlToCount.size;
+
     for (var url in urlToCount) {
-      var productivityClass = 0;
-      if (isListed(url, niceDomains)) {
-        //make an object with a url and views attribute and push it to the list.
-        productivityClass = 2;
-      } else if (isListed(url, naughtyDomains)) {
-        productivityClass = 1;
-      }
-      domains.push({ domain: url,
-        visits: urlToCount[url],
-        productivity: productivityClass });
+      getNiceness(url, function (niceness) {
+        console.log(niceness);
+        var productiveValue = 0;
+        if (!isEmpty(niceness)) {
+          productiveValue = niceness.niceness;
+        }
+
+        domains.push({ domain: url,
+          visits: urlToCount[url],
+          productivity: productiveValue,
+          id: niceness.id });
+        domainsToCount--;
+
+        if (domainsToCount == 0) {
+          onAllProcessedVisits();
+        }
+      });
     }
 
-    //Simple sorting operator
-    function domainSort(a, b) {
-      return b.visits - a.visits;
+    var onAllProcessedVisits = function onAllProcessedVisits() {
+
+      //Simple sorting operator
+      function domainSort(a, b) {
+        return b.visits - a.visits;
+      };
+
+      //Sort each of the lists, putting the most viewed domains first.
+      domains.sort(domainSort);
+      //domains.naughtyList.sort(domainSort);
+      //domains.neutralList.sort(domainSort);
+
+      callback(domains);
     };
-
-    //Sort each of the lists, putting the most viewed domains first.
-    domains.sort(domainSort);
-    //domains.naughtyList.sort(domainSort);
-    //domains.neutralList.sort(domainSort);
-
-    callback(domains);
   });
   //return domains;
 }
