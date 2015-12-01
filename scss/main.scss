@@ -17,6 +17,18 @@ body {
   font-family: "Georgia", "Times New Roman", Times, serif;
 }
 
+.button {
+  @extend .heading;
+  background-color: $accent3;
+  color: white;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 1px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+}
+
 .heading {
   font-family: "San Francisco", "Myriad Pro", Myriad, Arial, sans-serif;
   font-weight: bold;

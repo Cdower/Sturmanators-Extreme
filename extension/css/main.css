@@ -11,7 +11,17 @@ body {
   color: #282C34;
   font-family: "Georgia", "Times New Roman", Times, serif; }
 
-.heading, ul li {
+.button {
+  background-color: #05AFD1;
+  color: white;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 1px;
+  outline: none;
+  border: none;
+  border-radius: 5px; }
+
+.heading, .button, ul li {
   font-family: "San Francisco", "Myriad Pro", Myriad, Arial, sans-serif;
   font-weight: bold;
   text-transform: uppercase;
