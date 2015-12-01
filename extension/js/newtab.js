@@ -5,7 +5,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var VERBOSE = true;
-var TESTING = true;
+var TESTING = false;
 
 var Domain = (function () {
   function Domain(options) {

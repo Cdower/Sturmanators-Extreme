@@ -19,41 +19,38 @@
     <link rel="stylesheet" type="text/css" href="css/normalize.css">
     <link rel="stylesheet" type="text/css" href="css/skeleton.css">
     <link rel="stylesheet" type="text/css" href="css/plottable.css">
-    <link rel="stylesheet" type="text/css" href="css/newtab.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
   <body>
     <div class="container">
-      <div class="row header">
+      <div class="div header">
+        <h5 id="header-logo">Minerva Analytics</h5>
+      </div>
+
+      <div class="row analytics">
         <div class="twelve columns">
-          <h5 id="header-logo">Minerva Analytics</h5>
+          <h6 class="section-heading heading">Browsing History</h6>
+          <!-- Put Analytics Graphs here -->
+          <!-- TODO: ADD class tags to make graph bigger and legend smaller -->
+          <svg align="left" id="legend"></svg>
+          <svg align="center" id="graph"></svg>
         </div>
       </div>
 
-      <div class="row">
-       <div class="six columns">
-          <h6 id="analytics-logo">Browsing Analytics </h6>
-        <div class="row graph">
-          <div class="six columns">
-            <!-- Put Analytics Graphs here -->
-            <!-- TODO: ADD class tags to make graph bigger and legend smaller -->
-            <svg align="left" id="legend"></svg>
-            <svg align="center" id="graph"></svg> 
-          </div> 
-      </div> 
-       </div>
-
-      <div class="six columns">
-        <h5 id="content-logo"> Recommended Content </h5>
-        <div class="wikipedia-container"></div>
+      <div class="row wikipedia">
+        <div class="twelve columns">
+            <h6 class="section-heading heading">Recommended Content</h6>
+            <div class="wikipedia-container"></div>
+        </div>
       </div>
 
       <div class="row details">
         <div class="four columns">
-          <h5>Productive</h5>
+          <h6 class="heading">Productive</h6>
           <ul class="domain-list-productive"></ul>
         </div>
         <div class="four columns">
-          <h5>Unproductive</h5>
+          <h6 class="heading">Unproductive</h6>
           <ul>
             <li>lipsum.com
               <div class="controls">
@@ -93,7 +90,7 @@
           </ul>
         </div>
         <div class="four columns">
-          <h5>Unknown</h5>
+          <h6 class="heading">Unknown</h6>
           <ul>
             <li>lipsum.com
               <div class="controls">

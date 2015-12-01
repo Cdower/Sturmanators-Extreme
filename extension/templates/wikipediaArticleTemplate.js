@@ -1,12 +1,14 @@
 wikipediaArticleTemplate = [
-  "<div class='wikipedia-article'>",
-  	"<a href= <%= link %> >",
-    "<img class='wikipedia-article-image' height=23% width=23% src='<%= imageUrl %>'></img>",
-    "<p class='wikipedia-article-title'>",
+  "<div class='wikipedia-article four columns'>",
+    "<a href= <%= link %> >",
+    "<img class='wikipedia-article-image' src='<%= imageUrl %>'></img>",
+    "<div class='wikipedia-article-content'>",
+    "<h6 class='wikipedia-article-title'>",
       "<%= title %>",
-    "</p>",
+    "</h6>",
     "<div class='wikipedia-article-summary'><%= summary %></div>",
-  	"</a>",
+    "</div>",
+    "</a>",
   "</div>"
 ];
 

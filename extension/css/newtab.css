@@ -1,11 +1,24 @@
+/* base: #FAFAF5
+ * alt: #F4F4EB
+ * dark: #282C34
+ * accent: #3A7E69
+ */
+
 body {
-  background-color: #F4FBFB;
+  background-color: #FAFAF5;
 }
+
+.base { background-color: #FAFAF5;}
+.alt { background-color: #F4F4EB; }
+.dark { background-color: #282C34; }
+.accent { background-color: #3A7E69; }
+
 
 img{
   margin: 10px;
   float: left;
 }
+
 
 a{
   text-decoration: none;

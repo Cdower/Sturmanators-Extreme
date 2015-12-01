@@ -1,5 +1,5 @@
 var VERBOSE = true;
-var TESTING = true;
+var TESTING = false;
 
 class Domain {
   constructor(options){

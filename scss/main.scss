@@ -1,0 +1,100 @@
+$base: #FDFDFF;
+$alt: #F4F4EB;
+$dark: #282C34;
+$accent1: #FA3429;
+$accent2: #F9A61F;
+$accent3: #05AFD1;
+
+
+.base { background-color: $base; }
+.alt { background-color: $alt; }
+.dark { background-color: $dark; }
+
+
+body {
+  @extend .base;
+  color: $dark;
+  font-family: "Georgia", "Times New Roman", Times, serif;
+}
+
+.heading {
+  font-family: "San Francisco", "Myriad Pro", Myriad, Arial, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#analytics-logo {
+}
+
+.wikipedia-article {
+  height: 450px;
+  position: relative;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0px 1px 2px rgba(0,0,0,.1);
+  border-radius: 2px;
+
+  img {
+    height: 250px;
+  }
+
+  .wikipedia-article-content {
+    position: absolute;
+    top: 250px;
+    width: calc(100% - 30px);
+    height: 200px;
+    color: $dark;
+    padding: 15px;
+  }
+
+  .wikipedia-article-title {
+    color: black;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .wikipedia-article-summary {
+    color: fade-out($dark, 0.1);
+  }
+}
+
+.header {
+  margin-top: 20px;
+  opacity: 0.2;
+  margin-left: -230px;
+  position: fixed;
+  top: 10px;
+}
+
+.analytics {
+  h6 {color: $accent1;}
+  background-color: white;
+  box-shadow: 0px 1px 2px rgba(0,0,0,.1);
+  border-radius: 5px;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.wikipedia {
+  h6 {color: $accent2;}
+  margin-top: 50px;
+}
+
+.details {
+  h6 {color: $accent3;}
+  margin-top: 50px;
+}
+
+ul {
+  list-style: none;
+
+  li {
+    @extend .heading;
+    text-transform: none;
+    font-weight: normal;
+    margin: 5px 0px;
+  }
+}
+
+
