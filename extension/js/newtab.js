@@ -18,12 +18,6 @@ var Domain = (function () {
     this.history = {};
   }
 
-  //=============================================================
-  //Begin graph rendering code
-
-  //AnalyticsRender class
-  //Grooms list of domain objects for render by graphing methods
-
   _createClass(Domain, [{
     key: "render",
     value: function render() {
@@ -62,6 +56,26 @@ var Domain = (function () {
 
   return Domain;
 })();
+
+var rgb2hex = function rgb2hex(rgb) {
+  rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+  function hex(x) {
+    return ("0" + parseInt(x).toString(16)).slice(-2);
+  }
+  return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+};
+
+var getColorsFromDom = function getColorsFromDom() {
+  var colors = [rgb2hex($("#color-productive").css("color")), rgb2hex($("#color-unproductive").css("color")), rgb2hex($("#color-unknown").css("color"))];
+
+  return colors;
+};
+
+//=============================================================
+//Begin graph rendering code
+
+//AnalyticsRender class
+//Grooms list of domain objects for render by graphing methods
 
 var AnalyticsRender = (function () {
   function AnalyticsRender(domains) {
@@ -110,7 +124,7 @@ var AnalyticsRender = (function () {
     key: "renderBarGraph",
     value: function renderBarGraph() {
       var colorScale = new Plottable.Scales.Color();
-      colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
+      colorScale.range(getColorsFromDom());
 
       var xScale = new Plottable.Scales.Category();
       var yScale = new Plottable.Scales.Linear();
@@ -169,7 +183,7 @@ var AnalyticsRender = (function () {
     value: function renderPieGraph() {
       var scale = new Plottable.Scales.Linear();
       var colorScale = new Plottable.Scales.Color();
-      colorScale.range(["#0000FF", "#FF0000", "#FF00FF"]);
+      colorScale.range(getColorsFromDom());
       var legend = new Plottable.Components.Legend(colorScale);
       colorScale.domain([this.categoryData[2].x, this.categoryData[1].x, this.categoryData[0].x]);
       legend.xAlignment("left");
@@ -251,6 +265,10 @@ var fetchWikipediaArticle = function fetchWikipediaArticle(titleName, callback, 
   });
 };
 
+var setClassification = function setClassification(domain, classification) {
+  console.debug("FUNCTION: setClassification()", domain, classification);
+};
+
 var renderDomainList = function renderDomainList(domains, renderTargetSelector) {
   if (VERBOSE) {
     console.debug("FUNCTION: renderDomainList()", domains, renderTargetSelector);
@@ -310,12 +328,62 @@ var renderDomainList = function renderDomainList(domains, renderTargetSelector) 
   }
 };
 
+var addDomainClassificationListeners = function addDomainClassificationListeners() {
+  var controls = $(".controls");
+  var controlProductive = controls.children(".control-item-productive");
+  var controlUnproductive = controls.find(".control-item-unproductive");
+  var controlUnknown = controls.find(".control-item-unknown");
+
+  controlProductive.on("click", function (e) {
+    var targetDomain = $(e.toElement).attr("data-domain");
+    setClassification(targetDomain, 2);
+  });
+
+  controlUnproductive.on("click", function (e) {
+    var targetDomain = $(e.toElement).attr("data-domain");
+    setClassification(targetDomain, 1);
+  });
+
+  controlUnknown.on("click", function (e) {
+    var targetDomain = $(e.toElement).attr("data-domain");
+    setClassification(targetDomain, 0);
+  });
+};
+
+var renderDomainLists = function renderDomainLists(domains) {
+  if (VERBOSE) {
+    console.debug("FUNCTION: renderDomainLists()", domains);
+  }
+
+  var productive = _.map(_.filter(domains, function (domain) {
+    return domain.productivity == 2;
+  }), function (d, k) {
+    return new Domain(d);
+  });
+
+  var unproductive = _.map(_.filter(domains, function (domain) {
+    return domain.productivity == 1;
+  }), function (d, k) {
+    return new Domain(d);
+  });
+
+  var unknown = _.map(_.filter(domains, function (domain) {
+    return domain.productivity == 0;
+  }), function (d, k) {
+    return new Domain(d);
+  });
+
+  renderDomainList(productive, "ul.domain-list-productive");
+  renderDomainList(unknown, "ul.domain-list-unknown");
+  renderDomainList(unproductive, "ul.domain-list-unproductive");
+
+  addDomainClassificationListeners();
+};
+
 var DOMLoaded = function DOMLoaded() {
   if (VERBOSE) {
     console.debug("EVENT: DOMContentLoaded");
   }
-
-  renderDomainList(domains, "ul.domain-list-productive");
 
   var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
 
@@ -344,8 +412,6 @@ var DOMLoaded = function DOMLoaded() {
     }
   }
 
-  renderDomainList(domains, "ul.domain-list-productive");
-
   var endTime = new Date().getTime();
   //The time 12 hours ago. Milleseconds * seconds * minutes * hours
   var startTime = endTime - 1000 * 60 * 60 * 12;
@@ -354,8 +420,8 @@ var DOMLoaded = function DOMLoaded() {
     console.log(domains);
   });
   getDomains(startTime, endTime, function (domains) {
-    console.log(domains);
     renderGraph(domains);
+    renderDomainLists(domains);
   });
 };
 

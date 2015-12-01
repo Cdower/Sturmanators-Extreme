@@ -22,12 +22,16 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
   <body>
+
+    <div class="styleguide hidden">
+      <div id="color-productive"></div>
+      <div id="color-unproductive"></div>
+      <div id="color-unknown"></div>
+    </div>
     <div class="container">
       <div class="div header">
         <h5 id="header-logo">Minerva Analytics</h5>
       </div>
-
-      <div class="button">Here bitch!</div>
 
       <div class="row analytics">
         <div class="twelve columns">
@@ -47,81 +51,18 @@
       </div>
 
       <div class="row details">
-        <div class="four columns">
+        <div class="four columns productive">
           <h6 class="heading">Productive</h6>
           <ul class="domain-list-productive"></ul>
         </div>
-        <div class="four columns">
-          <h6 class="heading">Unproductive</h6>
-          <ul>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
+        <div class="four columns unknown">
+          <h6 class="heading">Unknown</h6>
+          <ul class="domain-list-unknown">
           </ul>
         </div>
-        <div class="four columns">
-          <h6 class="heading">Unknown</h6>
-          <ul>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
-            <li>lipsum.com
-              <div class="controls">
-                <span class="control-item control-item-productive"></span>
-                <span class="control-item control-item-unknown"></span>
-                <span class="control-item control-item-unproductive"></span>
-              </div>
-            </li>
+        <div class="four columns unproductive">
+          <h6 class="heading">Unproductive</h6>
+          <ul class="domain-list-unproductive">
           </ul>
         </div>
       </div>

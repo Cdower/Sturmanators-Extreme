@@ -12,12 +12,12 @@
  */
 
 domainListingTemplate = [
-  "<li>",
+  "<li id='uid' class='domain-listing'>",
   "<%= domain %>",
   "<div class='controls'>",
-    "<span class='control-item control-item-productive'></span>",
-    "<span class='control-item control-item-unknown'></span>",
-    "<span class='control-item control-item-unproductive'></span>",
+    "<span data-domain='<%= domain %>' class='control-item control-item-productive unchecked'></span>",
+    "<span data-domain='<%= domain %>' class='control-item control-item-unknown'></span>",
+    "<span data-domain='<%= domain %>' class='control-item control-item-unproductive unchecked'></span>",
   "</div>",
   "</li>"
 ];
