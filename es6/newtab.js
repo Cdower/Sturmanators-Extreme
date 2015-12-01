@@ -215,6 +215,12 @@ var DOMLoaded = function() {
   getTimeSlots(startTime,endTime, function(domains){console.log(domains);});
   getDomains(startTime,endTime, function(domains){console.log(domains);
                                                   renderGraph(domains);});
+  //console.log(chrome.storage);
+  setNiceness("https://developer.chrome.com/extensions/storage" , 1);
+  getNiceness("https://developer.chrome.com/extensions/storage",function(niceness){
+    console.log("getting object from storage");
+    console.log(niceness);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);

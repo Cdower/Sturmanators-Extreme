@@ -1,9 +1,15 @@
 "use strict";
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var VERBOSE = true;
 
 //=====================================================================
 //Begin helper functions
+
+//Initial domains to populate storage with.
+var naughtyDomains = ["facebook.com", "buzzfeed.com", "reddit.com", "www.youtube.com", "i.imgur.com"];
+var niceDomains = ["wikipedia", "news.ycombinator", "stackoverflow", "lms9.rpi.edu", "docs.google.com", "mail.google.com"];
 
 //Function that returns true if an item in a list is contained in url
 var isListed = function isListed(url, list) {
@@ -19,16 +25,18 @@ var isListed = function isListed(url, list) {
 //=====================================================================
 //This block of functions handles storing the naughty and nice domains in persitent memory.
 
-//Initial domains to populate storage with.
-var initialNaughtyDomains = ["facebook.com", "buzzfeed.com", "reddit.com", "www.youtube.com", "i.imgur.com"];
-var initialNiceDomains = ["wikipedia", "news.ycombinator", "stackoverflow", "lms9.rpi.edu", "docs.google.com", "mail.google.com"];
-
 /*A function that returns whether a domain is nice, naughty, or undefined
 0:Undefined
 1:Naughty
 2:Nice
 */
-var getNiceness = function getNiceness(url) {
+var getNiceness = function getNiceness(url, callback) {
+
+  url = purl(url).attr('host');
+
+  console.log(url);
+
+  chrome.storage.local.get([url], callback);
 
   return 0;
 };
@@ -38,7 +46,12 @@ var getNiceness = function getNiceness(url) {
 1:Naughty
 2:Nice
 */
-var setNiceness = function setNiceness(url) {};
+var setNiceness = function setNiceness(url, niceness) {
+
+  url = purl(url).attr('host');
+
+  chrome.storage.local.set(_defineProperty({}, url, niceness));
+};
 
 //End Domain List Functions
 //=====================================================================
