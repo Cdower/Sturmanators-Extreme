@@ -100,8 +100,8 @@ body {
 .details {
   .productive h6 { color: $productive; }
   .unproductive h6 { color: $unproductive; }
-  .productive h6 { color: $productive; }
-  h6 {color: $accent3;}
+  .unknown h6 { color: $dark; }
+
   margin-top: 50px;
 }
 

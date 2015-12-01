@@ -89,10 +89,8 @@ body {
     color: #44EAF3; }
   .details .unproductive h6 {
     color: #F4724E; }
-  .details .productive h6 {
-    color: #44EAF3; }
-  .details h6 {
-    color: #05AFD1; }
+  .details .unknown h6 {
+    color: #282C34; }
 
 ul {
   list-style: none; }
