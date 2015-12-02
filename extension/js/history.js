@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -6,10 +6,6 @@ var VERBOSE = true;
 
 //=====================================================================
 //Begin helper functions
-
-//Initial domains to populate storage with.
-var naughtyDomains = ["facebook.com", "buzzfeed.com", "www.reddit.com", "www.youtube.com", "imgur.com", "sturmanators.slack.com"];
-var niceDomains = ["en.wikipedia.org", "news.ycombinator", "stackoverflow.com", "lms9.rpi.edu", "docs.google.com", "mail.google.com"];
 
 //Function that returns true if an item in a list is contained in url
 var isListed = function isListed(url, list) {
@@ -19,6 +15,15 @@ var isListed = function isListed(url, list) {
   return false;
 };
 
+//Function to check if an object has any properties
+/*Copied from here: 
+  http://stackoverflow.com/questions/679915/how-do-i-test-for-an-empty-javascript-object*/
+function isEmpty(obj) {
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) return false;
+  }
+  return true;
+}
 //End helper functions
 //=====================================================================
 
@@ -53,20 +58,15 @@ var setNiceness = function setNiceness(url, niceness, callback) {
   chrome.storage.local.set(_defineProperty({}, url, niceness), callback);
 };
 
-//Function to check if an object has any properties
-//Copied from here: http://stackoverflow.com/questions/679915/how-do-i-test-for-an-empty-javascript-object
-function isEmpty(obj) {
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) return false;
-  }
-  return true;
-}
-
 /*This function writes a couple of predefined domains as productive or not 
   so that the "out of box experience" is more pleasant.
 
 */
 var initializeDomains = function initializeDomains(callback) {
+
+  //Initial domains to populate storage with.
+  var naughtyDomains = ["facebook.com", "buzzfeed.com", "www.reddit.com", "www.youtube.com", "imgur.com", "sturmanators.slack.com"];
+  var niceDomains = ["en.wikipedia.org", "news.ycombinator", "stackoverflow.com", "lms9.rpi.edu", "docs.google.com", "mail.google.com"];
 
   getNiceness("configured", function (preset) {
     //if (isEmpty(preset)) {
@@ -120,7 +120,8 @@ function getDomains(startTime, endTime, callback) {
       }
       urlToCount[parsedURL]++;
 
-      //This gives the total times a url was visited, but not the total times in our limited time slot.
+      /*This gives the total times a url was visited, but not the total times in our 
+        limited time slot.*/
       //historyItems[visit].visitCount;
     }
 
