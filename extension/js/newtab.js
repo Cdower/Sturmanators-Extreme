@@ -82,9 +82,7 @@ var AnalyticsRender = (function () {
     _classCallCheck(this, AnalyticsRender);
 
     this.categoryData = [{ x: "Unknown", visits: 0 }, { x: "Unproductive", visits: 0 }, { x: "Productive", visits: 0 }];
-    //console.log(domains);
     for (item in domains) {
-      //console.log(domains[item]);
       this.categoryData[domains[item].productivity].visits += domains[item].visits;
     }
   }
@@ -248,11 +246,15 @@ var fetchWikipediaArticle = function fetchWikipediaArticle(titleName, callback, 
 
 var setClassification = function setClassification(domain, classification) {
   console.debug("FUNCTION: setClassification()", domain, classification);
+
+  //This takes time, so refreshing the list of domains is done in a callback
   setNiceness(domain, classification, function () {
 
+    //After changing the classification of a domain refresh the list
     var endTime = new Date().getTime();
     //The time 12 hours ago. Milleseconds * seconds * minutes * hours
     var startTime = endTime - 1000 * 60 * 60 * 12;
+    //Get the domain list, and then when it is done write the results to the screen
     getDomains(startTime, endTime, function (domains) {
       renderGraph(domains);
       renderDomainLists(domains);
@@ -411,6 +413,7 @@ var DOMLoaded = function DOMLoaded() {
   //The time 12 hours ago. Milleseconds * seconds * minutes * hours
   var startTime = endTime - 1000 * 60 * 60 * 12;
 
+  //Get the domain list, and then when it is done write the results to the screen
   getDomains(startTime, endTime, function (domains) {
     renderGraph(domains);
     renderDomainLists(domains);
