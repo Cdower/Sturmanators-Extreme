@@ -222,6 +222,13 @@ var constructWikiLink = function constructWikiLink(title) {
   return "http://en.wikipedia.org/wiki/" + title;
 };
 
+var truncate = function truncate(string, length) {
+  if (string.length < length) {
+    return string;
+  }
+  return string.substring(0, length) + "...";
+};
+
 var renderWikiData = function renderWikiData(data, link, container) {
   // Compile article template
   var templateString = wikipediaArticleTemplate.join("\n");
@@ -234,7 +241,7 @@ var renderWikiData = function renderWikiData(data, link, container) {
 
   if (data.summary != undefined) {
     if (data.summary.title != undefined) {
-      title = data.summary.title;
+      title = truncate(data.summary.title, 25);
     }
 
     if (data.summary.image != undefined) {
@@ -242,7 +249,7 @@ var renderWikiData = function renderWikiData(data, link, container) {
     }
 
     if (data.summary.summary != undefined) {
-      truncatedSummary = data.summary.summary.substring(0, 150) + "...";
+      truncatedSummary = truncate(data.summary.summary, 150);
     }
   }
 
@@ -385,7 +392,7 @@ var DOMLoaded = function DOMLoaded() {
     console.debug("EVENT: DOMContentLoaded");
   }
 
-  var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
+  var articles = _.sample(FeaturedArticles, 3);
 
   var _iteratorNormalCompletion5 = true;
   var _didIteratorError5 = false;
