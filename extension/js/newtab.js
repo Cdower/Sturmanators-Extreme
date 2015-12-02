@@ -202,6 +202,8 @@ var constructWikiLink = function constructWikiLink(title) {
 };
 
 var renderWikiData = function renderWikiData(data, link, container) {
+  console.log(data);
+
   // Compile article template
   var templateString = wikipediaArticleTemplate.join("\n");
   var compiled = _.template(templateString);
@@ -378,7 +380,7 @@ var DOMLoaded = function DOMLoaded() {
     console.debug("EVENT: DOMContentLoaded");
   }
 
-  var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
+  var articles = ["Beekeeping", "Arnold_Schwarzenegger", "Banana"];
 
   var _iteratorNormalCompletion4 = true;
   var _didIteratorError4 = false;

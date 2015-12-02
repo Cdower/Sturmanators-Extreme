@@ -156,6 +156,8 @@ var constructWikiLink = function(title){
 }
 
 var renderWikiData = function(data, link, container){
+  console.log(data);
+
   // Compile article template
   var templateString = wikipediaArticleTemplate.join("\n");
   var compiled = _.template(templateString);
@@ -279,7 +281,7 @@ var renderDomainLists = function(domains){
 var DOMLoaded = function() {
   if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
 
-  var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
+  var articles = ["Beekeeping", "Arnold_Schwarzenegger", "Banana"];
 
   for(var a of articles){
     fetchWikipediaArticle(a, renderWikiData, $(".wikipedia-container"));
