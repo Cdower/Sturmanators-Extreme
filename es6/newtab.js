@@ -120,6 +120,7 @@ class AnalyticsRender{
       .x(function(d) {return d.x; }, xScale)
       .y(function(d) {return d.y; }, yScale)
       .labelsEnabled(true)
+      .animated(true)
       .attr("fill", function(d, i, dataset) { return dataset.metadata(); }, colorScale);
     new Plottable.Components.Table([
       [yAxis,plot],
@@ -159,10 +160,6 @@ class AnalyticsRender{
 
 }
 
-var clearGraph = function(){
-  console.log("click");
-}
-
 /*
 *   recieve data to render and decide what to render
 *   renderGraph creates an AnalyticsRender object and tells it what to render and how based on data on input
@@ -187,6 +184,12 @@ var renderGraph = function(domains, graph) {
   var svg = $("#graph_id")
   var button1 = $("#button1");
   button1.click(function(){
+    svg.empty();
+    visual.renderPieGraph();
+  });
+  var button2 = $("#button2");
+  button2.click(function(){
+    svg.empty();
     visual.renderBarGraph();
   });
 
@@ -275,9 +278,8 @@ var DOMLoaded = function() {
   var twelveHours = 1000*60*60*12;
   var startTime = endTime - twelveHours;
   
-  getTimeSlots(startTime,endTime, function(domains){console.log(domains);});
-  getDomains(startTime,endTime, function(domains){console.log(domains);
-                                                  renderGraph(domains);});
+  getTimeSlots(startTime,endTime, function(domains){console.log("getTimeSlots:"); console.log(domains);});
+  getDomains(startTime,endTime, function(domains){renderGraph(domains);});
 
 }
 
