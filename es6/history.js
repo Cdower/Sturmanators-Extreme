@@ -5,7 +5,7 @@ var VERBOSE = true;
 
 //Initial domains to populate storage with. 
 var naughtyDomains = ["facebook.com", "buzzfeed.com", "www.reddit.com","www.youtube.com","imgur.com"];
-var niceDomains = ["wikipedia","news.ycombinator","stackoverflow","lms9.rpi.edu","docs.google.com","mail.google.com"];
+var niceDomains = ["en.wikipedia.org","news.ycombinator","stackoverflow","lms9.rpi.edu","docs.google.com","mail.google.com"];
 
 //Function that returns true if an item in a list is contained in url
 var isListed = function(url, list) {
@@ -31,7 +31,7 @@ var getNiceness = function(url, callback){
 
   url = purl(url).attr('host'); 
   
-  chrome.storage.local.get( [url], callback);
+  chrome.storage.local.get( [url], callback.bind(url));
 
   return 0;
 }
@@ -88,18 +88,18 @@ function isEmpty(obj) {
 var initializeDomains = function(callback){
 
   getNiceness("configured",function(preset){
-    if (isEmpty(preset)) {
+    //if (isEmpty(preset)) {
       console.log("Adding domains for the first time"); 
 
       setNiceness("configured", 0);     
       
       for(var url in niceDomains){
-        setNiceness(url,2);
+        setNiceness(niceDomains[url],2);
       }
       for(var url in naughtyDomains){
-        setNiceness(url, 1);
+        setNiceness(naughtyDomains[url], 1);
       }    
-    }
+    //}
     callback();
   });
 };
@@ -221,10 +221,11 @@ function getDomains(startTime, endTime, callback) {
 
     /*For each of the urls add them and their view counter to their 
      respective productive or unproductive lists */
-    var domainsToCount = urlToCount.size;
-    
+    var domainsToCount = Object.keys(urlToCount).length;
+    console.log(urlToCount);
     for(var url in urlToCount){
       getNiceness(url,function(niceness){
+        url = this;
         console.log(niceness);
         var productiveValue = 0
          if (! isEmpty(niceness)) {
@@ -235,6 +236,7 @@ function getDomains(startTime, endTime, callback) {
                       visits:urlToCount[url], 
                       productivity:productiveValue});
         domainsToCount--;
+        console.log(domainsToCount);
 
         if(domainsToCount == 0){
           onAllProcessedVisits();

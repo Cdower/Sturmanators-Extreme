@@ -9,7 +9,7 @@ var VERBOSE = true;
 
 //Initial domains to populate storage with.
 var naughtyDomains = ["facebook.com", "buzzfeed.com", "www.reddit.com", "www.youtube.com", "imgur.com"];
-var niceDomains = ["wikipedia", "news.ycombinator", "stackoverflow", "lms9.rpi.edu", "docs.google.com", "mail.google.com"];
+var niceDomains = ["en.wikipedia.org", "news.ycombinator", "stackoverflow", "lms9.rpi.edu", "docs.google.com", "mail.google.com"];
 
 //Function that returns true if an item in a list is contained in url
 var isListed = function isListed(url, list) {
@@ -34,28 +34,28 @@ var getNiceness = function getNiceness(url, callback) {
 
   url = purl(url).attr('host');
 
-  console.log(url);
-
-  chrome.storage.local.get([url], callback);
+  chrome.storage.local.get([url], callback.bind(url));
 
   return 0;
 };
 
-var getUniqueID = function getUniqueID(callback) {
-  chrome.storage.local.get("uniqueID", function (obj) {
+/*
+var getUniqueID = function(callback){
+  chrome.storage.local.get("uniqueID", function(obj){
     var ID = 0;
 
-    if (!isEmpty(obj)) {
+    if(! isEmpty(obj)){ 
       ID = obj.uniqueID + 1;
     }
 
     console.log("Got unique ID of %s", ID);
 
-    chrome.storage.local.set({ uniqueID: ID }, function () {
-      callback(ID);
+    chrome.storage.local.set({uniqueID:ID}, function(){
+      callback(ID)
     });
   });
-};
+}
+*/
 
 /*A function that sets a domain to either nice, naughty, or undefined
 0:Undefined
@@ -65,16 +65,19 @@ var getUniqueID = function getUniqueID(callback) {
 var setNiceness = function setNiceness(url, niceness, callback) {
 
   url = purl(url).attr('host');
-
-  chrome.storage.local.get([url], function (obj) {
-    if (isEmpty(obj)) {
-      getUniqueID(function (id) {
-        chrome.storage.local.set(_defineProperty({}, url, { niceness: niceness, id: id }), callback);
+  /*  
+  chrome.storage.local.get([url], function(obj){
+    if(isEmpty(obj)){
+      getUniqueID(function(id){
+        chrome.storage.local.set({[url]:{niceness:niceness,id:id}},callback);   
       });
-    } else {
-      chrome.storage.local.set(_defineProperty({}, url, { niceness: niceness, id: obj[url].id }), callback);
+    }
+    else{
+      chrome.storage.local.set({[url]:{niceness:niceness,id:obj[url].id}},callback);
     }
   });
+  */
+  chrome.storage.local.set(_defineProperty({}, url, niceness), callback);
 };
 
 function isEmpty(obj) {
@@ -87,18 +90,18 @@ function isEmpty(obj) {
 var initializeDomains = function initializeDomains(callback) {
 
   getNiceness("configured", function (preset) {
-    if (isEmpty(preset)) {
-      console.log("Adding domains for the first time");
+    //if (isEmpty(preset)) {
+    console.log("Adding domains for the first time");
 
-      setNiceness("configured", 0);
+    setNiceness("configured", 0);
 
-      for (var url in niceDomains) {
-        setNiceness(url, 2);
-      }
-      for (var url in naughtyDomains) {
-        setNiceness(url, 1);
-      }
+    for (var url in niceDomains) {
+      setNiceness(niceDomains[url], 2);
     }
+    for (var url in naughtyDomains) {
+      setNiceness(naughtyDomains[url], 1);
+    }
+    //}
     callback();
   });
 };
@@ -216,21 +219,22 @@ function getDomains(startTime, endTime, callback) {
 
     /*For each of the urls add them and their view counter to their 
      respective productive or unproductive lists */
-    var domainsToCount = urlToCount.size;
-
+    var domainsToCount = Object.keys(urlToCount).length;
+    console.log(urlToCount);
     for (var url in urlToCount) {
       getNiceness(url, function (niceness) {
+        url = this;
         console.log(niceness);
         var productiveValue = 0;
         if (!isEmpty(niceness)) {
-          productiveValue = niceness.niceness;
+          productiveValue = niceness[url];
         }
 
         domains.push({ domain: url,
           visits: urlToCount[url],
-          productivity: productiveValue,
-          id: niceness.id });
+          productivity: productiveValue });
         domainsToCount--;
+        console.log(domainsToCount);
 
         if (domainsToCount == 0) {
           onAllProcessedVisits();

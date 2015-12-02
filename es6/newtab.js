@@ -46,8 +46,10 @@ class Domain {
 class AnalyticsRender{
   constructor(domains){
     this.categoryData = [{x: "Unknown", visits: 0}, {x: "Unproductive", visits: 0}, {x: "Productive", visits: 0}];
-    for(item of domains){
-        this.categoryData[item.productivity].visits += item.visits;
+    console.log(domains);
+    for(item in domains){
+        console.log(domains[item]);
+        this.categoryData[domains[item].productivity].visits += domains[item].visits;
       }
   }
 
@@ -222,11 +224,11 @@ var DOMLoaded = function() {
   });*/
   
   //This has to be blocking so that the domains can populate before evaluating the history
-  initializeDomains(function(){
-    getDomains(startTime,endTime, function(domains){console.log(domains);
-                                                  renderGraph(domains);});  
+  initializeDomains(function(){  
   });
-  
+
+  getDomains(startTime,endTime, function(domains){console.log(domains);
+                                                  renderGraph(domains);});
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);
