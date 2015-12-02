@@ -3,6 +3,10 @@ var VERBOSE = true;
 //=====================================================================
 //Begin helper functions
 
+//Initial domains to populate storage with. 
+var naughtyDomains = ["facebook.com", "buzzfeed.com", "www.reddit.com","www.youtube.com","imgur.com","sturmanators.slack.com"];
+var niceDomains = ["en.wikipedia.org","news.ycombinator","stackoverflow.com","lms9.rpi.edu","docs.google.com","mail.google.com"];
+
 //Function that returns true if an item in a list is contained in url
 var isListed = function(url, list) {
   for(var domain in list){
@@ -11,16 +15,98 @@ var isListed = function(url, list) {
   return false;
 }
 
-//2 arrays that hold the naughty, and nice URLs.
-//at some point we'll move this to persistant storage
-
-/*This is purely sample information. This is not meant to in any way represent the 
-  sort of domains we'll be filtereing out */
-var naughtyDomains = ["facebook.com", "buzzfeed.com", "reddit.com","www.youtube.com","i.imgur.com"];
-var niceDomains = ["wikipedia","news.ycombinator","stackoverflow","lms9.rpi.edu","docs.google.com","mail.google.com"];
 
 //End helper functions
 //=====================================================================
+
+//=====================================================================
+//This block of functions handles storing the naughty and nice domains in persitent memory.
+
+/*A function that returns whether a domain is nice, naughty, or undefined
+0:Undefined
+1:Naughty
+2:Nice
+*/
+var getNiceness = function(url, callback){
+
+  url = purl(url).attr('host'); 
+  
+  chrome.storage.local.get( [url], callback.bind(url));
+
+  return 0;
+}
+
+/*
+var getUniqueID = function(callback){
+  chrome.storage.local.get("uniqueID", function(obj){
+    var ID = 0;
+
+    if(! isEmpty(obj)){ 
+      ID = obj.uniqueID + 1;
+    }
+
+    console.log("Got unique ID of %s", ID);
+
+    chrome.storage.local.set({uniqueID:ID}, function(){
+      callback(ID)
+    });
+  });
+}
+*/
+
+/*A function that sets a domain to either nice, naughty, or undefined
+0:Undefined
+1:Naughty
+2:Nice
+*/
+var setNiceness = function(url, niceness, callback){
+
+  url = purl(url).attr('host');
+  /*  
+  chrome.storage.local.get([url], function(obj){
+    if(isEmpty(obj)){
+      getUniqueID(function(id){
+        chrome.storage.local.set({[url]:{niceness:niceness,id:id}},callback);   
+      });
+    }
+    else{
+      chrome.storage.local.set({[url]:{niceness:niceness,id:obj[url].id}},callback);
+    }
+  });
+*/
+  chrome.storage.local.set({[url]:niceness},callback);
+}
+
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+    return true;
+}
+
+var initializeDomains = function(callback){
+
+  getNiceness("configured",function(preset){
+    //if (isEmpty(preset)) {
+      console.log("Adding domains for the first time"); 
+
+      setNiceness("configured", 0);     
+      
+      for(var url in niceDomains){
+        setNiceness(niceDomains[url],2);
+      }
+      for(var url in naughtyDomains){
+        setNiceness(naughtyDomains[url], 1);
+      }    
+    //}
+    callback();
+  });
+};
+
+//End Domain List Functions
+//=====================================================================
+
 
 //We need to return a couple of metrics:
 //First we need to return the productivity of specified time slots.
@@ -135,31 +221,44 @@ function getDomains(startTime, endTime, callback) {
 
     /*For each of the urls add them and their view counter to their 
      respective productive or unproductive lists */
+    var domainsToCount = Object.keys(urlToCount).length;
+    //console.log(urlToCount);
     for(var url in urlToCount){
-      var productivityClass = 0;
-      if(isListed(url, niceDomains)){
-        //make an object with a url and views attribute and push it to the list.
-        productivityClass = 2;
-      }
-      else if(isListed(url, naughtyDomains)){
-        productivityClass = 1;  
-      }
+      getNiceness(url,function(niceness){
+        url = this;
+        //console.log(niceness);
+        var productiveValue = 0
+         if (! isEmpty(niceness)) {
+          productiveValue = niceness[url];
+         }
+
         domains.push({domain:url, 
                       visits:urlToCount[url], 
-                      productivity:productivityClass});
+                      productivity:productiveValue});
+        domainsToCount--;
+        //console.log(domainsToCount);
+
+        if(domainsToCount == 0){
+          onAllProcessedVisits();
+        }
+      }); 
     }
+        
+    var onAllProcessedVisits = function(){
 
-    //Simple sorting operator
-    function domainSort(a,b){
-      return b.visits - a.visits;
-    };
+      //Simple sorting operator
+      function domainSort(a,b){
+        return b.visits - a.visits;
+      };
 
-    //Sort each of the lists, putting the most viewed domains first.
-    domains.sort(domainSort);
-    //domains.naughtyList.sort(domainSort);
-    //domains.neutralList.sort(domainSort);
+      //Sort each of the lists, putting the most viewed domains first.
+      domains.sort(domainSort);
+      //domains.naughtyList.sort(domainSort);
+      //domains.neutralList.sort(domainSort);
 
-    callback(domains);
+      callback(domains);
+
+    }
   });
   //return domains;
 

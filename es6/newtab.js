@@ -64,8 +64,10 @@ var getColorsFromDom = function(){
 class AnalyticsRender{
   constructor(domains){
     this.categoryData = [{x: "Unknown", visits: 0}, {x: "Unproductive", visits: 0}, {x: "Productive", visits: 0}];
-    for(item of domains){
-        this.categoryData[item.productivity].visits += item.visits;
+    //console.log(domains);
+    for(item in domains){
+        //console.log(domains[item]);
+        this.categoryData[domains[item].productivity].visits += domains[item].visits;
       }
   }
 
@@ -270,15 +272,20 @@ var DOMLoaded = function() {
     fetchWikipediaArticle(a, renderWikiData, $(".wikipedia-container"));
   }
 
+
+  //This has to be blocking so that the domains can populate before evaluating the history
+  initializeDomains(function(){  
+  });
+
   var endTime = (new Date).getTime();
   //The time 12 hours ago. Milleseconds * seconds * minutes * hours
   var startTime = endTime - (1000*60*60*12);
 
-  getTimeSlots(startTime, endTime, function(domains){console.log(domains);});
   getDomains(startTime, endTime, function(domains){
     renderGraph(domains);
     renderDomainLists(domains);
   });
+
 }
 
 document.addEventListener('DOMContentLoaded', DOMLoaded, false);

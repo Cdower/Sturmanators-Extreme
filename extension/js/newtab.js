@@ -82,29 +82,10 @@ var AnalyticsRender = (function () {
     _classCallCheck(this, AnalyticsRender);
 
     this.categoryData = [{ x: "Unknown", visits: 0 }, { x: "Unproductive", visits: 0 }, { x: "Productive", visits: 0 }];
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-      for (var _iterator = domains[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        item = _step.value;
-
-        this.categoryData[item.productivity].visits += item.visits;
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator["return"]) {
-          _iterator["return"]();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
+    //console.log(domains);
+    for (item in domains) {
+      //console.log(domains[item]);
+      this.categoryData[domains[item].productivity].visits += domains[item].visits;
     }
   }
 
@@ -133,29 +114,29 @@ var AnalyticsRender = (function () {
       var yAxis = new Plottable.Axes.Numeric(yScale, "left");
 
       var baseVal = this.categoryData[0].visits / 2;
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
       try {
-        for (var _iterator2 = this.categoryData[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          item = _step2.value;
+        for (var _iterator = this.categoryData[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          item = _step.value;
 
           if (item.visits / 2 < baseVal) {
             baseVal = item.visits / 2;
           }
         }
       } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
+        _didIteratorError = true;
+        _iteratorError = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-            _iterator2["return"]();
+          if (!_iteratorNormalCompletion && _iterator["return"]) {
+            _iterator["return"]();
           }
         } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
+          if (_didIteratorError) {
+            throw _iteratorError;
           }
         }
       }
@@ -276,16 +257,41 @@ var renderDomainList = function renderDomainList(domains, renderTargetSelector) 
 
   var str = "";
 
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
+
+  try {
+    for (var _iterator2 = domains[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var d = _step2.value;
+
+      d.setTemplate(domainListingTemplate);
+      str += d.render();
+    }
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+        _iterator2["return"]();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
+      }
+    }
+  }
+
   var _iteratorNormalCompletion3 = true;
   var _didIteratorError3 = false;
   var _iteratorError3 = undefined;
 
   try {
-    for (var _iterator3 = domains[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-      var d = _step3.value;
+    for (var _iterator3 = $(renderTargetSelector)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+      var n = _step3.value;
 
-      d.setTemplate(domainListingTemplate);
-      str += d.render();
+      n.innerHTML = str;
     }
   } catch (err) {
     _didIteratorError3 = true;
@@ -298,31 +304,6 @@ var renderDomainList = function renderDomainList(domains, renderTargetSelector) 
     } finally {
       if (_didIteratorError3) {
         throw _iteratorError3;
-      }
-    }
-  }
-
-  var _iteratorNormalCompletion4 = true;
-  var _didIteratorError4 = false;
-  var _iteratorError4 = undefined;
-
-  try {
-    for (var _iterator4 = $(renderTargetSelector)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-      var n = _step4.value;
-
-      n.innerHTML = str;
-    }
-  } catch (err) {
-    _didIteratorError4 = true;
-    _iteratorError4 = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion4 && _iterator4["return"]) {
-        _iterator4["return"]();
-      }
-    } finally {
-      if (_didIteratorError4) {
-        throw _iteratorError4;
       }
     }
   }
@@ -387,38 +368,39 @@ var DOMLoaded = function DOMLoaded() {
 
   var articles = ["Invasion_of_Normandy", "Banana", "Arthur_Tedder,_1st_Baron_Tedder"];
 
-  var _iteratorNormalCompletion5 = true;
-  var _didIteratorError5 = false;
-  var _iteratorError5 = undefined;
+  var _iteratorNormalCompletion4 = true;
+  var _didIteratorError4 = false;
+  var _iteratorError4 = undefined;
 
   try {
-    for (var _iterator5 = articles[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-      var a = _step5.value;
+    for (var _iterator4 = articles[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+      var a = _step4.value;
 
       fetchWikipediaArticle(a, renderWikiData, $(".wikipedia-container"));
     }
+
+    //This has to be blocking so that the domains can populate before evaluating the history
   } catch (err) {
-    _didIteratorError5 = true;
-    _iteratorError5 = err;
+    _didIteratorError4 = true;
+    _iteratorError4 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion5 && _iterator5["return"]) {
-        _iterator5["return"]();
+      if (!_iteratorNormalCompletion4 && _iterator4["return"]) {
+        _iterator4["return"]();
       }
     } finally {
-      if (_didIteratorError5) {
-        throw _iteratorError5;
+      if (_didIteratorError4) {
+        throw _iteratorError4;
       }
     }
   }
+
+  initializeDomains(function () {});
 
   var endTime = new Date().getTime();
   //The time 12 hours ago. Milleseconds * seconds * minutes * hours
   var startTime = endTime - 1000 * 60 * 60 * 12;
 
-  getTimeSlots(startTime, endTime, function (domains) {
-    console.log(domains);
-  });
   getDomains(startTime, endTime, function (domains) {
     renderGraph(domains);
     renderDomainLists(domains);
