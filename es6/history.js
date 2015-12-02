@@ -33,10 +33,9 @@ function isEmpty(obj) {
 2:Nice
 */
 var getNiceness = function(url, callback){
-
+  //
   //Clean the url
-  url = purl(url).attr('host'); 
-  
+  url = purl(url).attr('host');
   chrome.storage.local.get( [url], callback.bind(url));
 
   return 0;

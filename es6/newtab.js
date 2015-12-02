@@ -289,13 +289,12 @@ var DOMLoaded = function() {
 
 
   //This has to be blocking so that the domains can populate before evaluating the history
-  initializeDomains(function(){  
+  initializeDomains(function(){
   });
 
   var endTime = (new Date).getTime();
   //The time 12 hours ago. Milleseconds * seconds * minutes * hours
   var startTime = endTime - (1000*60*60*12);
-  
   //Get the domain list, and then when it is done write the results to the screen
   getDomains(startTime, endTime, function(domains){
     renderGraph(domains);
