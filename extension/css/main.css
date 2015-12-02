@@ -66,6 +66,12 @@ body {
   .analytics h6 {
     color: #FA3429; }
 
+.graph {
+  height: 420px; }
+
+.legend {
+  height: 60px; }
+
 .wikipedia {
   margin-top: 50px; }
   .wikipedia h6 {
@@ -82,3 +88,5 @@ ul {
     text-transform: none;
     font-weight: normal;
     margin: 5px 0px; }
+
+/*# sourceMappingURL=main.css.map */

@@ -68,7 +68,7 @@ var AnalyticsRender = (function () {
     _classCallCheck(this, AnalyticsRender);
 
     var prodUnprodUnknownColors = ["#FF00FF", "#FF0000", "#0000FF"];
-    this.categoryData = [{ x: "Unknown", visits: 0 }, { x: "Unproductive", visits: 0 }, { x: "Productive", visits: 0 }];
+    this.categoryData = [{ x: "Unknown", visits: 0, time: "Past Week" }, { x: "Unproductive", visits: 0, time: "Past Week" }, { x: "Productive", visits: 0, time: "Past Week" }];
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
@@ -199,8 +199,8 @@ var AnalyticsRender = (function () {
         return d.visits;
       }, scale).innerRadius(0).attr("fill", function (d) {
         return d.x;
-      }, colorScale).outerRadius(60).labelsEnabled(true).renderTo("svg#graph");
-      legend.renderTo("svg#legend");
+      }, colorScale).outerRadius(120).labelsEnabled(true).renderTo("svg#graph");
+      legend.renderTo("svg#graph");
       window.addEventListener("resize", function () {
         plot.redraw();
       });
@@ -368,7 +368,8 @@ var DOMLoaded = function DOMLoaded() {
 
   var endTime = new Date().getTime();
   //The time 12 hours ago. Milleseconds * seconds * minutes * hours
-  var startTime = endTime - 1000 * 60 * 60 * 12;
+  var twelveHours = 1000 * 60 * 60 * 12;
+  var startTime = endTime - twelveHours;
 
   getTimeSlots(startTime, endTime, function (domains) {
     console.log(domains);
