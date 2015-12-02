@@ -45,6 +45,7 @@ class Domain {
 //Grooms list of domain objects for render by graphing methods
 class AnalyticsRender{
   constructor(domains){
+    var prodUnprodUnknownColors = ["#FF00FF","#FF0000","#0000FF"];
     this.categoryData = [{x: "Unknown", visits: 0}, {x: "Unproductive", visits: 0}, {x: "Productive", visits: 0}];
     for(item of domains){
         this.categoryData[item.productivity].visits += item.visits;
@@ -57,8 +58,7 @@ class AnalyticsRender{
   */
   renderBarGraph() {
     var colorScale = new Plottable.Scales.Color();
-    colorScale.range(["#FF00FF", "#FF0000", "#0000FF"]);
-
+    colorScale.range(this.prodUnprodUnknownColors);
     var xScale = new Plottable.Scales.Category();
     var yScale = new Plottable.Scales.Linear();
 
@@ -88,6 +88,25 @@ class AnalyticsRender{
   }
 
   /*
+  * Renders Stacked bar graph for n timeperiods
+  */
+  renderStackedBarGraph(){
+    var xScale = new Plottable.Scales.categoryData(); //x is a date
+    var ySacle = new Plottable.Scales.Linear();
+    var colorScale = new Plottable.Scales.Color();
+    colorScale.range(this.prodUnprodUnknownColors);
+
+    var xAxis = new Plottable.Axes.Category(xScale, "bottom");
+    var yAxis = new Plottable.Axes.Numeric(yScale, "left");
+
+    //var for productive, unproductive, and unknown with x as a date/time y is number of visits
+    /*
+    var struct? array with time. { time: "", productive: , unproductive: , unknown: };
+    */
+
+  }
+
+  /*
   *   Renders a Pie graph from data processed by renderGraph
   *   Does not display or interact with time data at this time
   *   Assumes data is from all of time
@@ -95,7 +114,7 @@ class AnalyticsRender{
   renderPieGraph() {
     var scale = new Plottable.Scales.Linear();
     var colorScale = new Plottable.Scales.Color();
-    colorScale.range(["#0000FF", "#FF0000", "#FF00FF"]);
+    colorScale.range(this.prodUnprodUnknownColors);
     var legend = new Plottable.Components.Legend(colorScale)
     colorScale.domain([this.categoryData[2].x,this.categoryData[1].x,this.categoryData[0].x]);
     legend.xAlignment("left")
