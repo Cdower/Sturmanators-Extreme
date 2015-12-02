@@ -18,11 +18,9 @@ var Domain = (function () {
     this.history = {};
   }
 
-  //=============================================================
-  //Begin graph rendering code
-
-  //AnalyticsRender class
-  //Grooms list of domain objects for render by graphing methods
+  /*
+  * Parse Date from retrieved time
+  */
 
   _createClass(Domain, [{
     key: "render",
@@ -63,12 +61,24 @@ var Domain = (function () {
   return Domain;
 })();
 
+var parseDate = function parseDate(time) {
+  var unparsed = Date(time).split(' ');
+  var parsed = unparsed[1].concat("/").concat(unparsed[2]).concat(": ").concat(unparsed[4]);
+  return parsed;
+};
+
+//=============================================================
+//Begin graph rendering code
+
+//AnalyticsRender class
+//Grooms list of domain objects for render by graphing methods
+
 var AnalyticsRender = (function () {
   function AnalyticsRender(domains) {
     _classCallCheck(this, AnalyticsRender);
 
     var prodUnprodUnknownColors = ["#FF00FF", "#FF0000", "#0000FF"];
-    this.categoryData = [{ x: "Unknown", visits: 0, time: "Past Week" }, { x: "Unproductive", visits: 0, time: "Past Week" }, { x: "Productive", visits: 0, time: "Past Week" }];
+    this.categoryData = [{ x: "Unknown", visits: 0 }, { x: "Unproductive", visits: 0 }, { x: "Productive", visits: 0 }];
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
@@ -156,6 +166,8 @@ var AnalyticsRender = (function () {
       new Plottable.Components.Table([[yAxis, plot], [null, xAxis]]).renderTo("svg#graph_id");
       window.addEventListener("resize", function () {
         plot.redraw();
+        xAxis.redraw();
+        yAxis.redraw();
       });
     }
 
@@ -173,14 +185,69 @@ var AnalyticsRender = (function () {
       var xAxis = new Plottable.Axes.Category(xScale, "bottom");
       var yAxis = new Plottable.Axes.Numeric(yScale, "left");
 
+      var productive = [];
+      var unproductive = [];
+      var unknown = [];
+      var fakeArrayForBuildingDates = [];
+      //logic for time from the past week
+      //The time 12 hours ago. Milleseconds * seconds * minutes * hours
+      var twelveHours = 1000 * 60 * 60 * 12;
+      //Millseconds * seconds * minutes * hours * days
+      var oneWeek = 1000 * 60 * 60 * 24 * 7;
+      var currentTime = new Date().getTime();
+      var startTime = currentTime - oneWeek;
+      var endTime = startTime + twelveHours;
+
+      /*for(let i=0; i<14;i++){
+        var n = i*twelveHours + endTime;
+        var timeLabel = Date(n).split(' ')[1].concat("/").concat(Date(n).split(' ')[2]).concat(": ").concat(Date(n).split(' ')[4]);
+        productive.push({ x: timeLabel, y: 0 });
+        unproductive.push({ x: timeLabel, y: 0 });
+        unknown.push({ x: timeLabel, y: 0 });
+        //console.log( timeLabel, i);
+      }*/
+      for (var i = 0; i < 14; i++) {
+        var m = startTime + i * twelveHours;
+        var n = endTime + i * twelveHours;
+        getTimeSlots(m, n, function (domains) {
+          var timeLabel = parseDate(endTime + fakeArrayForBuildingDates.length * twelveHours);
+          productive.push({ x: fakeArrayForBuildingDates.length, y: domains.niceCount });
+          unproductive.push({ x: fakeArrayForBuildingDates.length, y: domains.naughtyCount });
+          unknown.push({ x: fakeArrayForBuildingDates.length, y: domains.neutralCount });
+          console.log(productive, fakeArrayForBuildingDates.length);
+          fakeArrayForBuildingDates.push(0);
+        });
+        //let timeLabel = parseDate(n);
+        //productive[i].x = timeLabel;
+        //unproductive[i].x = timeLabel;
+        //unknown[i].x = timeLabel;
+      }
+      /*while(startTime < currentTime){
+              getTimeSlots(startTime,endTime, function(domains){
+          var timeLabel = parseDate(endTime);
+          productive.push({ x: timeLabel, y: domains.niceCount });
+          unproductive.push({ x: timeLabel, y: domains.naughtyCount });
+          unknown.push({ x: timeLabel, y: domains.neutralCount } );
+          console.log(productive, timeLabel);
+        });
+        startTime += twelveHours;
+        endTime += twelveHours;
+      }*/
+
       //var for productive, unproductive, and unknown with x as a date/time y is number of visits
       /*
       var struct? array with time. { time: "", productive: , unproductive: , unknown: };
       */
-      var productive = [{ x: 1, y: 1 }, { x: 2, y: 3 }, { x: 3, y: 2 }, { x: 4, y: 4 }, { x: 5, y: 3 }, { x: 6, y: 5 }, { x: 7, y: 4 }, { x: 8, y: 9 }, { x: 10, y: 3 }, { x: 11, y: 5 }, { x: 12, y: 2 }, { x: 13, y: 7 }, { x: 14, y: 3 }];
-      var unproductive = [{ x: 1, y: 2 }, { x: 2, y: 1 }, { x: 3, y: 2 }, { x: 4, y: 1 }, { x: 5, y: 2 }, { x: 6, y: 1 }, { x: 7, y: 5 }, { x: 8, y: 8 }, { x: 10, y: 2 }, { x: 11, y: 3 }, { x: 12, y: 4 }, { x: 13, y: 3 }, { x: 14, y: 6 }];
-      var unknown = [{ x: 1, y: 2 }, { x: 2, y: 1 }, { x: 3, y: 2 }, { x: 4, y: 1 }, { x: 5, y: 2 }, { x: 6, y: 1 }, { x: 7, y: 6 }, { x: 8, y: 4 }, { x: 10, y: 6 }, { x: 11, y: 6 }, { x: 12, y: 3 }, { x: 13, y: 5 }, { x: 14, y: 2 }];
-
+      /*var productive = [{ x: "12/2", y: 1 }, { x: "12/4", y: 3 }, { x: 3, y: 2 },
+                     { x: 4, y: 4 }, { x: 5, y: 3 }, { x: 6, y: 5 }, 
+                     {x: 7, y: 4},{x:8 , y: 9}, {x:10, y: 3}, {x:11, y: 5}, {x:12, y: 2}, {x:13, y: 7}, {x:14, y: 3}];
+      var unproductive = [{ x: "12/2", y: 2 }, { x: "12/4", y: 1 }, { x: 3, y: 2 },
+                       { x: 4, y: 1 }, { x: 5, y: 2 }, { x: 6, y: 1 }, 
+                       {x: 7, y: 5}, {x:8 , y: 8}, {x:10, y: 2}, {x:11, y: 3}, {x:12, y: 4}, {x:13, y: 3}, {x:14, y: 6}];
+      var unknown = [{ x: "12/2", y: 2 }, { x: "12/4", y: 1 }, { x: 3, y: 2 },
+                       { x: 4, y: 1 }, { x: 5, y: 2 }, { x: 6, y: 1 }, 
+                       {x: 7, y: 6}, {x:8 , y: 4}, {x:10, y: 6}, {x:11, y: 6}, {x:12, y: 3}, {x:13, y: 5}, {x:14, y: 2}];
+      */
       var plot = new Plottable.Plots.StackedBar().addDataset(new Plottable.Dataset(productive).metadata(5)).addDataset(new Plottable.Dataset(unproductive).metadata(3)).addDataset(new Plottable.Dataset(unknown).metadata(1)).x(function (d) {
         return d.x;
       }, xScale).y(function (d) {
@@ -192,6 +259,8 @@ var AnalyticsRender = (function () {
 
       window.addEventListener("resize", function () {
         plot.redraw();
+        xAxis.redraw();
+        yAxis.redraw();
       });
     }
 
@@ -252,6 +321,11 @@ var renderGraph = function renderGraph(domains, graph) {
   button2.click(function () {
     svg.empty();
     visual.renderBarGraph();
+  });
+  var button3 = $("#button3");
+  button3.click(function () {
+    svg.empty();
+    visual.renderStackedBarGraph();
   });
 };
 
@@ -406,7 +480,7 @@ var DOMLoaded = function DOMLoaded() {
   var startTime = endTime - twelveHours;
 
   getTimeSlots(startTime, endTime, function (domains) {
-    console.log("getTimeSlots:");console.log(domains);
+    console.log(domains);
   });
   getDomains(startTime, endTime, function (domains) {
     renderGraph(domains);
