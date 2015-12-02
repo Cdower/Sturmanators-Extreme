@@ -202,6 +202,17 @@ var fetchWikipediaArticle = function(titleName, callback, container){
 
 var setClassification = function(domain, classification){
   console.debug("FUNCTION: setClassification()", domain, classification);
+  setNiceness(domain, classification,function(){
+
+    var endTime = (new Date).getTime();
+    //The time 12 hours ago. Milleseconds * seconds * minutes * hours
+    var startTime = endTime - (1000*60*60*12);
+    getDomains(startTime, endTime, function(domains){
+      renderGraph(domains);
+      renderDomainLists(domains);
+    });
+    
+  });
 }
 
 var renderDomainList = function(domains, renderTargetSelector){
