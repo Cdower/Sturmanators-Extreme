@@ -5,6 +5,7 @@
     "wikipedia-js": "0.0.6"
   },
   "scripts": {
-    "sass": "node-sass -w scss/main.scss -o extension/css"
+    "sass": "node-sass -w scss/main.scss -o extension/css",
+    "es6": "babel -w es6/ -d extension/js"
   }
 }

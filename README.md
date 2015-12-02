@@ -14,7 +14,7 @@ Development:
 - Install Node + npm (nodejs.org)
 - sudo npm install -g babel
 - npm install
-- babel -w es6/ -d extension/js
+- npm run es6
 - npm run sass
 
 Contributing:

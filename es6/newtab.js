@@ -152,6 +152,7 @@ var renderGraph = function(domains) {
 //======================================================================================
 
 var constructWikiLink = function(title){
+  console.log("lol");
   return "http://en.wikipedia.org/wiki/" + title;
 }
 
