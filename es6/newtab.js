@@ -159,16 +159,14 @@ class AnalyticsRender{
       var m = startTime+i*twelveHours;
       var n = endTime+i*twelveHours;
       getTimeSlots( m, n, function(domains){
-        console.log(domains);
         var timeLabel = parseDate(endTime + (fakeArrayForBuildingDates.length)*twelveHours );
         productive.push({ x: fakeArrayForBuildingDates.length, y: domains.niceCount });
         unproductive.push({ x: fakeArrayForBuildingDates.length, y: domains.naughtyCount });
         unknown.push({ x: fakeArrayForBuildingDates.length, y: domains.neutralCount } );
-        console.log(productive, fakeArrayForBuildingDates.length);
+        //console.log(productive, fakeArrayForBuildingDates.length);
         fakeArrayForBuildingDates.push( 0 );
 
         completion--
-        console.log(completion);
         if(completion==1){
           plotStackedGraph();
         }
@@ -205,7 +203,6 @@ class AnalyticsRender{
                      {x: 7, y: 6}, {x:8 , y: 4}, {x:10, y: 6}, {x:11, y: 6}, {x:12, y: 3}, {x:13, y: 5}, {x:14, y: 2}];
     */
     var plotStackedGraph = function(){
-      console.log("Plotting Graph");
       var plot = new Plottable.Plots.StackedBar()
       .addDataset(new Plottable.Dataset(productive).metadata(5))
       .addDataset(new Plottable.Dataset(unproductive).metadata(3))
@@ -364,7 +361,7 @@ var setClassification = function(domain, classification){
     //After changing the classification of a domain refresh the list
     var endTime = (new Date).getTime();
     //The time 12 hours ago. Milleseconds * seconds * minutes * hours
-    var startTime = endTime - (1000*60*60*12);
+    var startTime = endTime - (1000*60*60*24*7);
     //Get the domain list, and then when it is done write the results to the screen
     getDomains(startTime, endTime, function(domains){
       renderGraph(domains);
@@ -448,9 +445,9 @@ var DOMLoaded = function() {
   });
 
   var endTime = (new Date).getTime();
-  //The time 12 hours ago. Milleseconds * seconds * minutes * hours
-  var twelveHours = 1000*60*60*12;
-  var startTime = endTime - twelveHours;
+  //The time 12 hours ago. Milleseconds * seconds * minutes * hours * days
+  var oneWeek = 1000*60*60*24*7;
+  var startTime = endTime - oneWeek;
   //Get the domain list, and then when it is done write the results to the screen
   getDomains(startTime, endTime, function(domains){
     renderGraph(domains);
