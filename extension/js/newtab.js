@@ -206,6 +206,9 @@ var AnalyticsRender = (function () {
         unknown.push({ x: timeLabel, y: 0 });
         //console.log( timeLabel, i);
       }*/
+
+      var completion = 14;
+
       for (var i = 0; i < 14; i++) {
         var m = startTime + i * twelveHours;
         var n = endTime + i * twelveHours;
@@ -216,6 +219,12 @@ var AnalyticsRender = (function () {
           unknown.push({ x: fakeArrayForBuildingDates.length, y: domains.neutralCount });
           console.log(productive, fakeArrayForBuildingDates.length);
           fakeArrayForBuildingDates.push(0);
+
+          completion--;
+
+          if (completion == 0) {
+            plotStackedGraph();
+          }
         });
         //let timeLabel = parseDate(n);
         //productive[i].x = timeLabel;
@@ -248,15 +257,16 @@ var AnalyticsRender = (function () {
                        { x: 4, y: 1 }, { x: 5, y: 2 }, { x: 6, y: 1 }, 
                        {x: 7, y: 6}, {x:8 , y: 4}, {x:10, y: 6}, {x:11, y: 6}, {x:12, y: 3}, {x:13, y: 5}, {x:14, y: 2}];
       */
-      var plot = new Plottable.Plots.StackedBar().addDataset(new Plottable.Dataset(productive).metadata(5)).addDataset(new Plottable.Dataset(unproductive).metadata(3)).addDataset(new Plottable.Dataset(unknown).metadata(1)).x(function (d) {
-        return d.x;
-      }, xScale).y(function (d) {
-        return d.y;
-      }, yScale).labelsEnabled(true).animated(true).attr("fill", function (d, i, dataset) {
-        return dataset.metadata();
-      }, colorScale);
-      new Plottable.Components.Table([[yAxis, plot], [null, xAxis]]).renderTo("svg#graph_id");
-
+      var plotStackedGraph = function plotStackedGraph() {
+        var plot = new Plottable.Plots.StackedBar().addDataset(new Plottable.Dataset(productive).metadata(5)).addDataset(new Plottable.Dataset(unproductive).metadata(3)).addDataset(new Plottable.Dataset(unknown).metadata(1)).x(function (d) {
+          return d.x;
+        }, xScale).y(function (d) {
+          return d.y;
+        }, yScale).labelsEnabled(true).animated(true).attr("fill", function (d, i, dataset) {
+          return dataset.metadata();
+        }, colorScale);
+        new Plottable.Components.Table([[yAxis, plot], [null, xAxis]]).renderTo("svg#graph_id");
+      };
       window.addEventListener("resize", function () {
         plot.redraw();
         xAxis.redraw();
