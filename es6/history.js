@@ -91,6 +91,31 @@ var initializeDomains = function(callback){
 
 //We need a storted list of the most visited nice, naughty, and neutral domains
 
+function getTimeSlots(startTime, endTime, callback){
+  getDomains(startTime, endTime, function(domains){
+    var counts = {niceCount:0,naughtyCount:0,neutralCount:0};
+
+    /*
+    0:Undefined
+    1:Naughty
+    2:Nice
+    */
+    for(var domain in domains){
+      if(domains[domain].productivity == 0){
+        counts.neutralCount+=domains[domain].visits;
+      }
+      else if(domains[domain].productivity == 1){
+        counts.naughtyCount+=domains[domain].visits;
+      }
+      else if(domains[domain].productivity == 2){
+        counts.niceCount+=domains[domain].visits;
+      }
+    }
+
+    callback(counts);
+  })
+}
+
 function getDomains(startTime, endTime, callback) {
 
   //Return object containing the three domain lists
@@ -147,9 +172,14 @@ function getDomains(startTime, endTime, callback) {
           productiveValue = niceness[url];
         }
 
+        var visitCount = 0;
+        if(typeof urlToCount[url] != "undefined"){
+          visitCount = urlToCount[url];
+        }
+
         //Add the domain formatted as a domain item          
         domains.push({domain:url, 
-                      visits:urlToCount[url], 
+                      visits:visitCount, 
                       productivity:productiveValue});
         
         //Decrement the count of remaining domains
