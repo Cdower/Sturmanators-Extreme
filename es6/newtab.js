@@ -153,7 +153,7 @@ class AnalyticsRender{
       //console.log( timeLabel, i);
     }*/
 
-    var completion = 14;
+    var completion = 2;
 
     for(var i=0; i<14;i++){
       var m = startTime+i*twelveHours;
@@ -166,8 +166,8 @@ class AnalyticsRender{
         //console.log(productive, fakeArrayForBuildingDates.length);
         fakeArrayForBuildingDates.push( 0 );
 
-        completion--
-        if(completion==1){
+        completion++;
+        if(completion==i){
           plotStackedGraph();
         }
       });
