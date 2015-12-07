@@ -72,7 +72,7 @@ var parseDate = function(time){
 //Grooms list of domain objects for render by graphing methods
 class AnalyticsRender{
   constructor(domains){
-    var prodUnprodUnknownColors = ["#FF00FF","#FF0000","#0000FF"];
+    var prodUnprodUnknownColors = getColorsFromDom();
     this.categoryData = [{x: "Unknown", visits: 0}, {x: "Unproductive", visits: 0}, {x: "Productive", visits: 0}];
     for(item in domains){
         this.categoryData[domains[item].productivity].visits += domains[item].visits;
@@ -308,8 +308,6 @@ var truncate = function(string, length){
 }
 
 var renderWikiData = function(data, link, container){
-  console.log(data);
-
   // Compile article template
   var templateString = wikipediaArticleTemplate.join("\n");
   var compiled = _.template(templateString);
@@ -430,15 +428,47 @@ var renderDomainLists = function(domains){
   addDomainClassificationListeners();
 }
 
-var DOMLoaded = function() {
-  if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
-
+var setArticleCategory = function(category){
+  $(".wikipedia-container").html("");
   var articles = _.sample(FeaturedArticles, 3);
+
+  if(category == "technology"){
+    articles = _.sample(TechArticles, 3);
+  } else if(category == "finance"){
+    articles = _.sample(FinanceArticles, 3);
+  } else if(category == "politics"){
+    articles = _.sample(PoliticalArticles, 3);
+  }
 
   for(var a of articles){
     fetchWikipediaArticle(a, renderWikiData, $(".wikipedia-container"));
   }
 
+}
+
+var addArticleCategoryListeners = function(){
+  var buttonTechnology = $("#technology");
+  var buttonFinance = $("#finance");
+  var buttonPolitics = $("#politics");
+
+  buttonTechnology.on("click", function(){
+    setArticleCategory("technology");
+  });
+
+  buttonFinance.on("click", function(){
+    setArticleCategory("finance");
+  });
+
+  buttonPolitics.on("click", function(){
+    setArticleCategory("politics");
+  });
+}
+
+var DOMLoaded = function() {
+  if(VERBOSE){ console.debug("EVENT: DOMContentLoaded"); }
+
+  addArticleCategoryListeners();
+  setArticleCategory(null);
 
   //This has to be blocking so that the domains can populate before evaluating the history
   initializeDomains(function(){

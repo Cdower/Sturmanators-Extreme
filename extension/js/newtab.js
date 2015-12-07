@@ -90,7 +90,7 @@ var AnalyticsRender = (function () {
   function AnalyticsRender(domains) {
     _classCallCheck(this, AnalyticsRender);
 
-    var prodUnprodUnknownColors = ["#FF00FF", "#FF0000", "#0000FF"];
+    var prodUnprodUnknownColors = getColorsFromDom();
     this.categoryData = [{ x: "Unknown", visits: 0 }, { x: "Unproductive", visits: 0 }, { x: "Productive", visits: 0 }];
     for (item in domains) {
       this.categoryData[domains[item].productivity].visits += domains[item].visits;
@@ -347,8 +347,6 @@ var truncate = function truncate(string, length) {
 };
 
 var renderWikiData = function renderWikiData(data, link, container) {
-  console.log(data);
-
   // Compile article template
   var templateString = wikipediaArticleTemplate.join("\n");
   var compiled = _.template(templateString);
@@ -368,7 +366,7 @@ var renderWikiData = function renderWikiData(data, link, container) {
     }
 
     if (data.summary.summary != undefined) {
-      truncatedSummary = truncate(data.summary.summary, 170);
+      truncatedSummary = truncate(data.summary.summary, 150);
     }
   }
 
@@ -520,12 +518,17 @@ var renderDomainLists = function renderDomainLists(domains) {
   addDomainClassificationListeners();
 };
 
-var DOMLoaded = function DOMLoaded() {
-  if (VERBOSE) {
-    console.debug("EVENT: DOMContentLoaded");
-  }
-
+var setArticleCategory = function setArticleCategory(category) {
+  $(".wikipedia-container").html("");
   var articles = _.sample(FeaturedArticles, 3);
+
+  if (category == "technology") {
+    articles = _.sample(TechArticles, 3);
+  } else if (category == "finance") {
+    articles = _.sample(FinanceArticles, 3);
+  } else if (category == "politics") {
+    articles = _.sample(PoliticalArticles, 3);
+  }
 
   var _iteratorNormalCompletion4 = true;
   var _didIteratorError4 = false;
@@ -537,8 +540,6 @@ var DOMLoaded = function DOMLoaded() {
 
       fetchWikipediaArticle(a, renderWikiData, $(".wikipedia-container"));
     }
-
-    //This has to be blocking so that the domains can populate before evaluating the history
   } catch (err) {
     _didIteratorError4 = true;
     _iteratorError4 = err;
@@ -553,7 +554,35 @@ var DOMLoaded = function DOMLoaded() {
       }
     }
   }
+};
 
+var addArticleCategoryListeners = function addArticleCategoryListeners() {
+  var buttonTechnology = $("#technology");
+  var buttonFinance = $("#finance");
+  var buttonPolitics = $("#politics");
+
+  buttonTechnology.on("click", function () {
+    setArticleCategory("technology");
+  });
+
+  buttonFinance.on("click", function () {
+    setArticleCategory("finance");
+  });
+
+  buttonPolitics.on("click", function () {
+    setArticleCategory("politics");
+  });
+};
+
+var DOMLoaded = function DOMLoaded() {
+  if (VERBOSE) {
+    console.debug("EVENT: DOMContentLoaded");
+  }
+
+  addArticleCategoryListeners();
+  setArticleCategory(null);
+
+  //This has to be blocking so that the domains can populate before evaluating the history
   initializeDomains(function () {});
 
   var endTime = new Date().getTime();

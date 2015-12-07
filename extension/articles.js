@@ -64,7 +64,7 @@ var FeaturedArticles = [
   "1940_Brocklesby_mid-air_collision",
   "AHS_Centaur",
   "1968_Thule_Air_Base_B-52_crash",
-  "Ba_C%E1%BB%A5t",
+  "Ba_C%E1%BB%A5t"
 ];
 
 var TechArticles = [
@@ -81,7 +81,7 @@ var TechArticles = [
   "Product_lifecycle",
   "Spanish_language",
   "Java_(programming_language)",
-  "Oracle_Corporation",
+  "Oracle_Corporation"
 ];
 
 var FinanceArticles = [
@@ -91,7 +91,7 @@ var FinanceArticles = [
   "Stock",
   "Shareholder",
   "Liquidation",
-  "Bankruptcy",  
+  "Bankruptcy"
 ];
 
 var PoliticalArticles = [
@@ -99,5 +99,5 @@ var PoliticalArticles = [
   "President_of_the_United_States",
   "Executive_(government)",
   "Separation_of_powers",
-  "Refugee",
+  "Refugee"
 ];
