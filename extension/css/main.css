@@ -49,7 +49,7 @@ body {
   letter-spacing: 1px; }
 
 .wikipedia-container {
-  height: 400px; 
+  height: 333px; 
   width: 100%;
 }
 
@@ -62,18 +62,17 @@ body {
   border-radius: 2px; }
   .wikipedia-article img {
     width: 100%;
-    height: 30%;
-    min-height: calc(100% + 50px); }
+    max-height: 100px; }
   .wikipedia-article .wikipedia-article-image-container {
     width: 100%;
-    height: 200px;
+    max-height: 100px;
     overflow: hidden; }
   .wikipedia-article .wikipedia-article-content {
     position: absolute;
     width: calc(100% - 30px);
-    height: 200px;
+    height: 70px;
     color: #282C34;
-    padding: 15px; }
+     }
   .wikipedia-article .wikipedia-article-title {
     color: black;
     font-size: 14px;
@@ -128,7 +127,7 @@ body {
   padding: 20px;
   margin-bottom: 20px;
 
-  margin-top: 50px; }
+  margin-top: 20px; }
   .details .productive h6 {
     color: #44EAF3; }
   .details .unproductive h6 {

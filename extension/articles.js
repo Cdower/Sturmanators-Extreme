@@ -1,4 +1,18 @@
 var FeaturedArticles = [
+  "Microsoft",
+  "Google",
+  "Programmer",
+  "Executable",
+  "Machine_code",
+  "E-commerce",
+  "Finance",
+  "Commodity",
+  "Debugging",
+  "Software",
+  "Product_lifecycle",
+  "Spanish_language",
+  "Java_(programming_language)",
+  "Oracle_Corporation",
   "7_World_Trade_Center",
   "Bronwyn_Bancroft",
   "Acacia_pycnantha",
@@ -35,6 +49,7 @@ var FeaturedArticles = [
   "Aaliyah",
   "Attachment_theory",
   "243_Ida",
+  "Scrum_(software_development)",
   "Niels_Bohr",
   "1880_Democratic_National_Convention",
   "John_Adair",
@@ -50,5 +65,5 @@ var FeaturedArticles = [
   "1940_Brocklesby_mid-air_collision",
   "AHS_Centaur",
   "1968_Thule_Air_Base_B-52_crash",
-  "Ba_C%E1%BB%A5t"
+  "Ba_C%E1%BB%A5t",
 ];

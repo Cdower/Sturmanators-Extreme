@@ -368,7 +368,7 @@ var renderWikiData = function renderWikiData(data, link, container) {
     }
 
     if (data.summary.summary != undefined) {
-      truncatedSummary = truncate(data.summary.summary, 150);
+      truncatedSummary = truncate(data.summary.summary, 170);
     }
   }
 
