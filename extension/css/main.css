@@ -23,6 +23,10 @@ body {
   color: #282C34;
   font-family: "Georgia", "Times New Roman", Times, serif; }
 
+.buttonDiv{
+  margin: 10px;
+}
+
 .button {
   background-color: #05AFD1;
   color: white;
@@ -32,7 +36,6 @@ body {
   outline: none;
   border: none;
   border-radius: 5px; 
-  float: left;
 }
 
 .header{
@@ -100,7 +103,7 @@ body {
     color: #FA3429; }
 
 .graph {
-  height: 270px; 
+  height: 330px; 
 }
 
 .both{
