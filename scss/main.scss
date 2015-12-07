@@ -26,14 +26,17 @@ body {
 
 .button {
   @extend .heading;
-  background-color: $accent3;
-  color: white;
-  text-transform: uppercase;
-  font-size: 14px;
-  letter-spacing: 1px;
+  background-color: #E7E7EF;
+  color: #777D82;
+  font-size: 12px;
+  padding: 4px 10px;
+  margin: 10px;
+  margin-right: 0;
   outline: none;
   border: none;
-  border-radius: 5px;
+  border-radius: 2px;
+  line-height: 20px;
+  height: auto;
 }
 
 .heading {
@@ -44,36 +47,13 @@ body {
 }
 
 
-.wikipedia-container {
-  height: 460px;
-}
-
 .wikipedia-article {
-  height: 450px;
-  position: relative;
-  overflow: hidden;
-  background-color: white;
-  box-shadow: 0px 1px 2px rgba(0,0,0,.1);
-  border-radius: 2px;
-
-  img {
-    min-width: 100%;
-    min-height: calc(100% + 50px);
-  }
-
-  .wikipedia-article-image-container {
-    width: 100%;
-    height: 250px;
-    overflow: hidden;
-  }
+  a {text-decoration: none;}
 
   .wikipedia-article-content {
-    position: absolute;
-    top: 250px;
-    width: calc(100% - 30px);
-    height: 200px;
     color: $dark;
-    padding: 15px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
   }
 
   .wikipedia-article-title {
@@ -85,6 +65,12 @@ body {
   .wikipedia-article-summary {
     color: fade-out($dark, 0.1);
   }
+
+  &:last-child {
+    .wikipedia-article-content {
+      border: none;
+    }
+  }
 }
 
 .header {
@@ -95,22 +81,46 @@ body {
   top: 10px;
 }
 
+.primary {
+  margin-top: 50px;
+  height: 600px;
+}
+
 .analytics {
   h6 {color: $accent1;}
   background-color: white;
   box-shadow: 0px 1px 2px rgba(0,0,0,.1);
   border-radius: 5px;
-  margin-top: 20px;
   padding: 20px;
+  height: 100%;
+  position: relative;
 }
 
 .graph{
   height: 420px;
 }
 
+.buttonContainer {
+  width: 100%;
+  background-color: #F5F5FB;
+  border-top: 1px solid #E6E7F5;
+  border-radius: 0 0 5px 5px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
 .wikipedia {
-  h6 {color: $accent2;}
-  margin-top: 50px;
+  h6 {
+    color: $accent2;
+    margin-bottom: 0;
+  }
+  position: relative;
+  height: 100%;
+  background-color: white;
+  box-shadow: 0px 1px 2px rgba(0,0,0,.1);
+  border-radius: 5px;
+  padding: 20px;
 }
 
 .details {

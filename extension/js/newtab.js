@@ -307,25 +307,25 @@ var renderGraph = function renderGraph(domains, graph) {
 
   //watch buttons here
   if (graph == 1) {
-    visual.renderBarGraph();
+    visual.renderPieGraph();
   } else if (graph == 2) {
     visual.renderStackedBarGraph();
   } else {
-    visual.renderPieGraph();
+    visual.renderBarGraph();
   }
 
   var svg = $("#graph_id");
-  var button1 = $("#button1");
+  var button1 = $("#pie");
   button1.click(function () {
     svg.empty();
     visual.renderPieGraph();
   });
-  var button2 = $("#button2");
+  var button2 = $("#bar");
   button2.click(function () {
     svg.empty();
     visual.renderBarGraph();
   });
-  var button3 = $("#button3");
+  var button3 = $("#time");
   button3.click(function () {
     svg.empty();
     visual.renderStackedBarGraph();

@@ -34,57 +34,57 @@
 
     <div class="container">
 
-      <div class="header" align="center">
+      <div class="row header" align="center">
         <div class="twelve columns">
         <!--  <h5 id="header-logo">Minerva Analytics</h5>-->
         </div>
       </div>
 
-   <div class="row both">
-    <div class="row analytics">
-      <h6 class="section-heading heading">Browsing History</h6>
-        <div class="twelve columns">
-          <!-- Put Analytics Graphs here -->
-          <!-- TODO: ADD class tags to make graph bigger and legend smaller -->
-          <!-- <svg class = "legend" align="left" id="legend"></svg> -->
-          <svg class = "graph" align="center" id="graph_id"></svg>
-           <div class="buttonDiv" id="buttonDiv" align="center">
-            <div class="button" id="button1">Pie Graph</div>
-            <div class="button" id="button2">Bar Graph</div>
-            <div class="button" id="button3">Patterns Over Time</div>
-           </div>
-        </div>
-      </div>
+      <div class="row primary">
+        <div class="analytics eight columns">
+          <h6 class="section-heading heading">Browsing History</h6>
 
-      <div class="row wikipedia">
-        <div class="twelve columns">
+          <svg class = "graph" align="center" id="graph_id"></svg>
+
+          <div class="buttonContainer">
+            <div class="button" id="bar">Bar Graph</div>
+            <div class="button" id="time">Patterns Over Time</div>
+            <div class="button" id="pie">Pie Graph</div>
+          </div>
+        </div>
+
+        <div class="wikipedia four columns">
           <h6 class="section-heading heading">Recommended Content</h6>
-          <div class="wikipedia-container"></div>
-          <div class="buttonDiv" id="buttonDiv" align="center">
-          <div class="button" id="technology">Technology</div>
-          <div class="button" id="finance">Finance</div>
-          <div class="button" id="politics">Politics</div>
-         </div>
+
+          <div class="row wikipedia-container"></div>
+
+          <div class="buttonContainer">
+            <div class="button" id="technology">Technology</div>
+            <div class="button" id="finance">Finance</div>
+            <div class="button" id="politics">Politics</div>
+          </div>
         </div>
       </div>
-   </div>
 
       <div class="row details">
         <div class="four columns productive">
           <h6 class="heading">Productive</h6>
           <ul class="domain-list-productive"></ul>
         </div>
+
         <div class="four columns unknown">
           <h6 class="heading">Unknown</h6>
           <ul class="domain-list-unknown">
           </ul>
         </div>
+
         <div class="four columns unproductive">
           <h6 class="heading">Unproductive</h6>
           <ul class="domain-list-unproductive">
           </ul>
         </div>
       </div>
+
     </div>
   </body>
 </html>
