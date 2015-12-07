@@ -40,7 +40,6 @@ var FeaturedArticles = [
   "Mumia_Abu-Jamal",
   "Ace_Books",
   "Chinua_Achebe",
-  "0.999...",
   "Archimedes",
   "200_(Stargate_SG-1)",
   "Andjar_Asmara",
@@ -66,4 +65,39 @@ var FeaturedArticles = [
   "AHS_Centaur",
   "1968_Thule_Air_Base_B-52_crash",
   "Ba_C%E1%BB%A5t",
+];
+
+var TechArticles = [
+  "Microsoft",
+  "Google",
+  "Programmer",
+  "Executable",
+  "Machine_code",
+  "E-commerce",
+  "Finance",
+  "Commodity",
+  "Debugging",
+  "Software",
+  "Product_lifecycle",
+  "Spanish_language",
+  "Java_(programming_language)",
+  "Oracle_Corporation",
+];
+
+var FinanceArticles = [
+  "E-commerce",
+  "Finance",
+  "Commodity",
+  "Stock",
+  "Shareholder",
+  "Liquidation",
+  "Bankruptcy",  
+];
+
+var PoliticalArticles = [
+  "Barack_Obama",
+  "President_of_the_United_States",
+  "Executive_(government)",
+  "Separation_of_powers",
+  "Refugee",
 ];

@@ -1,5 +1,10 @@
 'use strict';
 
+chrome.tabs.getSelected(null, function(tab){
+    console.log(tab.url);
+});
+
+/*
 document.addEventListener('DOMContentLoaded', function () {
   var checkPageButton = document.getElementById('checkPage');
   checkPageButton.addEventListener('click', function () {
@@ -19,4 +24,4 @@ document.addEventListener('DOMContentLoaded', function () {
       f.submit();
     });
   }, false);
-}, false);
+}, false);*/
