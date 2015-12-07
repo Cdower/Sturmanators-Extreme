@@ -2,8 +2,8 @@
 
 chrome.tabs.getSelected(null, function(tab){
     console.log(tab.url);
+    document.getElementById("domainName").innerHTML = "<h3>" + tab.url + "</h3>";
 });
-
 /*
 document.addEventListener('DOMContentLoaded', function () {
   var checkPageButton = document.getElementById('checkPage');
