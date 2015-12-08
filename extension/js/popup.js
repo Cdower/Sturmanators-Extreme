@@ -1,5 +1,13 @@
 'use strict';
 
+chrome.tabs.getSelected(null, function(tab){
+    console.log(tab.url);
+    var cleanUrl = purl(tab.url).attr('host');
+
+    document.getElementById("domainName").innerHTML = "<h3>" + cleanUrl + "</h3>";
+});
+
+/*
 document.addEventListener('DOMContentLoaded', function () {
   var checkPageButton = document.getElementById('checkPage');
   checkPageButton.addEventListener('click', function () {
@@ -19,4 +27,4 @@ document.addEventListener('DOMContentLoaded', function () {
       f.submit();
     });
   }, false);
-}, false);
+}, false);*/
