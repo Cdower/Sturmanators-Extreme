@@ -394,7 +394,8 @@ var setClassification = function setClassification(domain, classification) {
 
   //This takes time, so refreshing the list of domains is done in a callback
   setNiceness(domain, classification, function () {
-
+    var svg = $("#graph_id");
+    svg.empty();
     //After changing the classification of a domain refresh the list
     var endTime = new Date().getTime();
     //The time 12 hours ago. Milleseconds * seconds * minutes * hours
