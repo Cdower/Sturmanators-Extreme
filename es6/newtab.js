@@ -126,6 +126,10 @@ class AnalyticsRender{
     var yScale = new Plottable.Scales.Linear();
     var colorScale = new Plottable.Scales.Color();
     colorScale.range(getColorsFromDom());
+    var legend = new Plottable.Components.Legend(colorScale)
+    //colorScale.domain([this.categoryData[2].x,this.categoryData[1].x,this.categoryData[0].x]);
+    legend.xAlignment("right");
+    legend.yAlignment("top");
 
     var xAxis = new Plottable.Axes.Category(xScale, "bottom");
     var yAxis = new Plottable.Axes.Numeric(yScale, "left");
@@ -135,7 +139,7 @@ class AnalyticsRender{
     var unknown = [];
     //logic for time from the past week
     //The time 12 hours ago. Milleseconds * seconds * minutes * hours
-    var oneHour = 1000*60*60*12; //was twelveHours
+    var oneHour = 1000*60*60*1; //was twelveHours
     //Millseconds * seconds * minutes * hours * days
     var twelveHours = 1000*60*60*12; //now 12 hours
     var currentTime = (new Date).getTime()
@@ -145,11 +149,10 @@ class AnalyticsRender{
     var completion = 0;
 
     for(var i=0; i<12;i++){
-      var m = startTime+i*oneHour;
-      var n = endTime+i*oneHour;
+      var m = startTime+(i*oneHour);
+      var n = endTime+(i*oneHour);
       getTimeSlots( m, n, function(domains){
         var timeLabel = parseDate(endTime + (completion)*twelveHours );
-
         productive.push({ x: completion, y: domains.niceCount });
         unproductive.push({ x: completion, y: domains.naughtyCount });
         unknown.push({ x: completion, y: domains.neutralCount } );
@@ -157,17 +160,21 @@ class AnalyticsRender{
         console.log(productive, completion);
 
         completion++;
+        $("#graph_id").empty();
+        plotStackedGraph();
         if(completion==i){
+          console.log(completion);
           plotStackedGraph();
         }
       });
     }
+    console.log(i, completion);
 
     var plotStackedGraph = function(){
       var plot = new Plottable.Plots.StackedBar()
-      .addDataset(new Plottable.Dataset(productive).metadata(5))
-      .addDataset(new Plottable.Dataset(unproductive).metadata(3))
-      .addDataset(new Plottable.Dataset(unknown).metadata(1))
+      .addDataset(new Plottable.Dataset(productive).metadata("Productive"))
+      .addDataset(new Plottable.Dataset(unproductive).metadata("Unproductive"))
+      .addDataset(new Plottable.Dataset(unknown).metadata("Unknown"))
       .x(function(d) {return d.x; }, xScale)
       .y(function(d) {return d.y; }, yScale)
       .labelsEnabled(true)
@@ -177,6 +184,7 @@ class AnalyticsRender{
         [yAxis,plot],
         [null,xAxis]
       ]).renderTo("svg#graph_id");
+      legend.renderTo("svg#graph_id");
 
       window.addEventListener("resize", function() {
         plot.redraw();
@@ -184,6 +192,7 @@ class AnalyticsRender{
         yAxis.redraw();
       });
     }
+    plotStackedGraph();
   }
 
   /*
@@ -207,7 +216,7 @@ class AnalyticsRender{
     .attr("fill", function(d) { return d.x; }, colorScale)
     .labelsEnabled(true)
     .renderTo("svg#graph_id");
-    legend.renderTo("svg#graph_id")
+    legend.renderTo("svg#graph_id");
     //.outerRadius(210)
     window.addEventListener("resize", function() { plot.redraw(); });
   }
