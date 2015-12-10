@@ -180,28 +180,28 @@ var AnalyticsRender = (function () {
       var productive = [];
       var unproductive = [];
       var unknown = [];
-      var fakeArrayForBuildingDates = [];
       //logic for time from the past week
       //The time 12 hours ago. Milleseconds * seconds * minutes * hours
-      var twelveHours = 1000 * 60 * 60 * 12; //now one hour
+      var oneHour = 1000 * 60 * 60 * 12; //was twelveHours
       //Millseconds * seconds * minutes * hours * days
-      var oneWeek = 1000 * 60 * 60 * 24 * 7; //now 12 hours
+      var twelveHours = 1000 * 60 * 60 * 12; //now 12 hours
       var currentTime = new Date().getTime();
-      var startTime = currentTime - oneWeek;
-      var endTime = startTime + twelveHours;
+      var startTime = currentTime - twelveHours;
+      var endTime = startTime + oneHour;
 
-      var completion = 2;
+      var completion = 0;
 
       for (var i = 0; i < 12; i++) {
-        var m = startTime + i * twelveHours;
-        var n = endTime + i * twelveHours;
+        var m = startTime + i * oneHour;
+        var n = endTime + i * oneHour;
         getTimeSlots(m, n, function (domains) {
-          var timeLabel = parseDate(endTime + fakeArrayForBuildingDates.length * twelveHours);
-          productive.push({ x: fakeArrayForBuildingDates.length, y: domains.niceCount });
-          unproductive.push({ x: fakeArrayForBuildingDates.length, y: domains.naughtyCount });
-          unknown.push({ x: fakeArrayForBuildingDates.length, y: domains.neutralCount });
-          console.log(productive, fakeArrayForBuildingDates.length, completion);
-          fakeArrayForBuildingDates.push(0);
+          var timeLabel = parseDate(endTime + completion * twelveHours);
+
+          productive.push({ x: completion, y: domains.niceCount });
+          unproductive.push({ x: completion, y: domains.naughtyCount });
+          unknown.push({ x: completion, y: domains.neutralCount });
+
+          console.log(productive, completion);
 
           completion++;
           if (completion == i) {
