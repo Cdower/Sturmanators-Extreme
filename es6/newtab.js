@@ -72,7 +72,6 @@ var parseDate = function(time){
 //Grooms list of domain objects for render by graphing methods
 class AnalyticsRender{
   constructor(domains){
-    var prodUnprodUnknownColors = getColorsFromDom();
     this.categoryData = [{x: "Unknown", visits: 0}, {x: "Unproductive", visits: 0}, {x: "Productive", visits: 0}];
     for(item in domains){
         this.categoryData[domains[item].productivity].visits += domains[item].visits;
@@ -85,7 +84,7 @@ class AnalyticsRender{
   */
   renderBarGraph() {
     var colorScale = new Plottable.Scales.Color();
-    colorScale.range(this.prodUnprodUnknownColors);
+    colorScale.range(getColorsFromDom());
     var xScale = new Plottable.Scales.Category();
     var yScale = new Plottable.Scales.Linear();
 
@@ -126,7 +125,7 @@ class AnalyticsRender{
     var xScale = new Plottable.Scales.Category(); //x is a date
     var yScale = new Plottable.Scales.Linear();
     var colorScale = new Plottable.Scales.Color();
-    colorScale.range(this.prodUnprodUnknownColors);
+    colorScale.range(getColorsFromDom());
 
     var xAxis = new Plottable.Axes.Category(xScale, "bottom");
     var yAxis = new Plottable.Axes.Numeric(yScale, "left");
@@ -137,25 +136,16 @@ class AnalyticsRender{
     var fakeArrayForBuildingDates = [];
     //logic for time from the past week
     //The time 12 hours ago. Milleseconds * seconds * minutes * hours
-    var twelveHours = 1000*60*60*12;
+    var twelveHours = 1000*60*60*12; //now one hour
     //Millseconds * seconds * minutes * hours * days
-    var oneWeek = 1000*60*60*24*7;
+    var oneWeek = 1000*60*60*24*7; //now 12 hours
     var currentTime = (new Date).getTime()
     var startTime =  currentTime - oneWeek;
     var endTime = startTime + twelveHours;
 
-    /*for(let i=0; i<14;i++){
-      var n = i*twelveHours + endTime;
-      var timeLabel = Date(n).split(' ')[1].concat("/").concat(Date(n).split(' ')[2]).concat(": ").concat(Date(n).split(' ')[4]);
-      productive.push({ x: timeLabel, y: 0 });
-      unproductive.push({ x: timeLabel, y: 0 });
-      unknown.push({ x: timeLabel, y: 0 });
-      //console.log( timeLabel, i);
-    }*/
-
     var completion = 2;
 
-    for(var i=0; i<14;i++){
+    for(var i=0; i<12;i++){
       var m = startTime+i*twelveHours;
       var n = endTime+i*twelveHours;
       getTimeSlots( m, n, function(domains){
@@ -163,7 +153,7 @@ class AnalyticsRender{
         productive.push({ x: fakeArrayForBuildingDates.length, y: domains.niceCount });
         unproductive.push({ x: fakeArrayForBuildingDates.length, y: domains.naughtyCount });
         unknown.push({ x: fakeArrayForBuildingDates.length, y: domains.neutralCount } );
-        //console.log(productive, fakeArrayForBuildingDates.length);
+        console.log(productive, fakeArrayForBuildingDates.length, completion);
         fakeArrayForBuildingDates.push( 0 );
 
         completion++;
@@ -171,37 +161,8 @@ class AnalyticsRender{
           plotStackedGraph();
         }
       });
-      //let timeLabel = parseDate(n);
-      //productive[i].x = timeLabel;
-      //unproductive[i].x = timeLabel;
-      //unknown[i].x = timeLabel;
     }
-    /*while(startTime < currentTime){
-            getTimeSlots(startTime,endTime, function(domains){
-        var timeLabel = parseDate(endTime);
-        productive.push({ x: timeLabel, y: domains.niceCount });
-        unproductive.push({ x: timeLabel, y: domains.naughtyCount });
-        unknown.push({ x: timeLabel, y: domains.neutralCount } );
-        console.log(productive, timeLabel);
-      });
-      startTime += twelveHours;
-      endTime += twelveHours;
-    }*/
 
-    //var for productive, unproductive, and unknown with x as a date/time y is number of visits
-    /*
-    var struct? array with time. { time: "", productive: , unproductive: , unknown: };
-    */
-    /*var productive = [{ x: "12/2", y: 1 }, { x: "12/4", y: 3 }, { x: 3, y: 2 },
-                   { x: 4, y: 4 }, { x: 5, y: 3 }, { x: 6, y: 5 }, 
-                   {x: 7, y: 4},{x:8 , y: 9}, {x:10, y: 3}, {x:11, y: 5}, {x:12, y: 2}, {x:13, y: 7}, {x:14, y: 3}];
-    var unproductive = [{ x: "12/2", y: 2 }, { x: "12/4", y: 1 }, { x: 3, y: 2 },
-                     { x: 4, y: 1 }, { x: 5, y: 2 }, { x: 6, y: 1 }, 
-                     {x: 7, y: 5}, {x:8 , y: 8}, {x:10, y: 2}, {x:11, y: 3}, {x:12, y: 4}, {x:13, y: 3}, {x:14, y: 6}];
-    var unknown = [{ x: "12/2", y: 2 }, { x: "12/4", y: 1 }, { x: 3, y: 2 },
-                     { x: 4, y: 1 }, { x: 5, y: 2 }, { x: 6, y: 1 }, 
-                     {x: 7, y: 6}, {x:8 , y: 4}, {x:10, y: 6}, {x:11, y: 6}, {x:12, y: 3}, {x:13, y: 5}, {x:14, y: 2}];
-    */
     var plotStackedGraph = function(){
       var plot = new Plottable.Plots.StackedBar()
       .addDataset(new Plottable.Dataset(productive).metadata(5))
@@ -233,7 +194,7 @@ class AnalyticsRender{
   renderPieGraph() {
     var scale = new Plottable.Scales.Linear();
     var colorScale = new Plottable.Scales.Color();
-    colorScale.range(this.prodUnprodUnknownColors);
+    colorScale.range(getColorsFromDom());
     var legend = new Plottable.Components.Legend(colorScale)
     colorScale.domain([this.categoryData[2].x,this.categoryData[1].x,this.categoryData[0].x]);
     legend.xAlignment("left")
